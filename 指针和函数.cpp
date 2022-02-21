@@ -15,7 +15,7 @@ int main()
 	int b = 10;
 	//地址传递  如果是地址传递可以修饰实参
 	//如果不想修改实参就用值传递 ；想修改实参就用地址传递
-	swap(a, b);
+	swap(&a,& b);
 	
 	cout << "a= " << a << endl;
 	cout << "b= " << b << endl;
