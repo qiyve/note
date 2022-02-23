@@ -1,3 +1,5 @@
-      select ：  选择           |    default  ：                     |   break ： 退出                 |    Person：个人              |  
-      sex： 性别                 |  Addressbook ：通讯录    |Address：地址                  |   addPerson：添加         |
-
+    select ：  选择             |   default  ：                     |   break ： 退出                 |  Person：个人               |  
+    sex     ：  性别             |  Addressbook ：通讯录   |   Address：地址               |  addPerson：添加         |
+    Show ：  显示             |   delete   :  删除               |   find     :    查找                |  modify  ：修改            |
+    Phone ：电话              |  clean ：清空
+   
