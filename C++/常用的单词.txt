@@ -1,0 +1,3 @@
+      select ：  选择           |    default  ：                     |   break ： 退出                 |    Person：个人              |  
+      sex： 性别                 |  Addressbook ：通讯录    |Address：地址                  |   addPerson：添加         |
+
