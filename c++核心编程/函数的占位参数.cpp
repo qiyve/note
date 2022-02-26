@@ -12,7 +12,7 @@ void func(int a,int=10)
 }
 int main()
 {
-	func(10, );
+	func(10, );//占位参数必须填补
 
 	system("pause");
 	return 0;
