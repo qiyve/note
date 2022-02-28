@@ -2,4 +2,5 @@
     sex     ：  性别             |  Addressbook ：通讯录   |   Address：地址               |  addPerson：添加          |
     Show ：  显示             |   delete   :  删除               |   find     :    查找                |  modify  ：修改             |
     Phone ：电话              |  clean ：清空                   |    global ： 全局                |   local    ：局部              |
-   
+   public 用于   公共权限  |  class  :  用于    类            |  calculate ：计算               |    set   :   设置                |
+  get： 显示                    |
