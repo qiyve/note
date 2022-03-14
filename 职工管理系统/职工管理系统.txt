@@ -251,6 +251,22 @@
               因此添加该公告函数，以便后续使用
 
               在WorkerManager.h 中添加成员函数 int Isexist (int id)
+                    
+    11.3 职工是否存在函数实现
+
+              在Worker Manager.cpp 中事项成员函数
+
+12、 修改职工职工功能
+
+          功能描述 ： 能够按照职工的编号对职工信息进行修改并保存
+
+   12.1 修改职工函数声明
+
+           在WorkerManager.h 中添加成员函数  void Mod_Emp();
+
+   12.2 修改职工函数实现
+
+           在Worker Manager.cpp 中实现成员函数  void Mod_Emp();
 
       
 
