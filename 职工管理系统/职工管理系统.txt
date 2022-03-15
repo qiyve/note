@@ -280,6 +280,31 @@
 
          在Worker Manager.cpp中实现成员函数 void Find_Emp();
 
+14、排序 
+
+        功能描述： 按照职工编号进行排序，排序的顺序由用户指定
+
+      14.1 排序函数声明 
+
+         在WorkerManager.h中添加成员函数 void Sort_Emp();
+
+      14.2 排序函数实现
+
+          在WorkerManager.cpp中实现成员函数 void Sort_Emp()；
+
+15、清空文件 
+ 
+       功能描述 ： 将文件中记录数据清空
+
+    15.1 清空函数声明
+
+        在WorkerManager.h中添加成员哈函数 void Clean_File();
+ 
+    15.2 清空函数实现
+
+       在WorkerManager.cpp 中实现成员函数 void clean-File（）；
+
+          首先我们先提示一下用户是否确认清空文件 避免误操作
       
 
       
