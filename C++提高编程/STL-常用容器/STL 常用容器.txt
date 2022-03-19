@@ -31,4 +31,61 @@
          string(const string & str);  // 使用一个string对象初始化另一个string对象
 
          string (int n,char c ) ;        //使用n个字符c初始化
-              
+
+  5.1.3 string赋值操作
+
+    功能描述：
+ 
+        给string字符串进行赋值
+
+     赋值的函数原型：
+
+        1. string& operator=(const char* s);        //char*类型字符串，赋值给当前的字符串
+
+        2. string& operator=(const string& s);    //把字符串s赋值给当前字符串
+
+        3. string& operator=(char c )；                //字符赋值给当前字符串
+
+        4. string& assign=(const char* s);            //把字符串s赋值给当前字符串
+
+        5. string& assign=(const char* s, int  n);  //把字符串s的前n个字符赋值给当前字符串
+
+        6. string& assign=(const string & s);        //把字符串s赋值给当前字符串
+
+        7 string& assign=(int n , char  c);              //用n个字符c赋值给当前字符串
+ 
+3.1.5 string查找和替换
+
+    功能描述:
+
+        查找 : 查找指定字符串是否存在
+
+        替换: 在指定的位置替换字符串
+
+      函数原型:
+
+       int find(const string& str, int pos = 0) const; //查找str第一次出现位置,从pos开始查找
+
+       int find(const char* s, int pos = 0) const;        //查找s第一次出现位置,从pos开始查找
+
+       int find(const char*  s, int pos, int n) const;     // 从pos位置查找s的前n个字符第一次位置
+
+       int find(const char c, int pos=0) const;           //查找字符C第一次出现位置
+
+       int find(const string& str, int pos =npos)const; // 查找str最后一次位置，从pos开始查找
+
+       int find(const char *s, int pos =npos)const;      //  查找str最后一次出现位置，从pos开始查找
+
+       int fied(const char c, int pos=0)const;              //  查找字符c最后一次出现位置
+
+       string& replace(int pos, int n, const string& str); //替换从pos开始n个字符为字符串str
+
+       string& replace(int pos, int n, const const char* s); //替换pos开始的n个字符为字符串s
+
+
+
+
+
+
+
+
