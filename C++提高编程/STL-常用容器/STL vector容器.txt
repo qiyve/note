@@ -1,0 +1,88 @@
+3.2、vector 容器
+
+    3.2.1 vector基本概念
+
+      功能:  
+                vector 数据结构和数组非常相似，也称为单端数组
+
+      vector与普通数组的区别：
+
+                 不同之处在于数组是静态空间，而vector 是动态扩展
+
+      动态扩展：
+
+                并不是在原空间之后续接新空间，而是找更大的内存空间，然后将原来数据拷贝新空间，释放原空间
+
+       vector容器的迭代器是支持随机访问的迭代器
+
+    3.2.2 vector 构造函数
+
+       功能描述 :  
+
+              创建 vector容器
+
+       函数原型：
+
+            vector  <T>  v ;                       //采用模板实现类实现，默认构造函数
+
+            vector （ v. begin（），v .endl() ); // 将 v (begin（）,end ( ) )区间中的元素拷贝给本身
+
+            vector ( n , elem );                  // 构造函数将n个elem拷贝给本身
+
+            vector ( const  vector  &vec); // 拷贝构造函数
+
+   3.2.3 vector 赋值操作
+
+       功能描述：
+
+            给vector容器进行赋值
+
+        函数原型：
+        
+             vector  &operator= ( const  vector &vec);  // 重载等号操作符
+
+             assign  (beg , end );   // 将 （beg , end ）区间中的数据拷贝赋值给本身
+
+             assign  ( n , elem ) ;   // 将n 个elem拷贝赋值给本身 
+
+   3.2.4 vector容量和大小
+
+       功能描述：
+
+             对vector容器的容量和大小操作
+
+       函数原型：
+ 
+            empty（);              // 判断容器是否为空
+
+            capacity（）；       //容器容量
+
+            size（）；              // 返回容器中元素的个数
+
+            resize（int  num ）；//重新定义容器的长度为num，若容器边长，则以默认值填充新位置
+                                             // 如果容器变短，则末尾超出容器长度的元素被删除
+
+            resize （int num，elem) ;  // 重新定义容器长度为num，若容器变长，则以elem值填充新位置
+                                                     // 如果容器变短，则末尾产出容器长度的元素被删除
+               
+   3.2.5 vector 插入和删除
+ 
+       功能描述：
+ 
+           对vector容器进行插入、删除操作
+
+        函数原型：
+
+           push_back ( ele );           // 尾部插入元素ele
+
+           pop_ back ( );                 // 删除最后一个元素
+
+           insert ( const_iterator  pos, ele) ; //迭代器指向位置pos插入元素ele
+        
+           insert ( const_iterator  pos, int count, ele); //迭代器指向位置pos插入count个元素ele
+
+           erase ( const_iterator  pos );   // 删除迭代器指向的元素
+
+           erase ( const_iterator  start, const_iterator  end); //删除迭代器从start到end之间的元素
+
+           clear ( );                       // 删除容器中所有元素  
