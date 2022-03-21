@@ -86,3 +86,40 @@
            erase ( const_iterator  start, const_iterator  end); //删除迭代器从start到end之间的元素
 
            clear ( );                       // 删除容器中所有元素  
+
+
+   3.2.6 vector 数据获取
+
+        对vector中的数据的存取操作
+
+        函数原型
+
+            at ( int idx );       // 返回索引 idx所指的数据
+
+            operator [ ] ;      // 返回索引 idx所指的数据
+
+            front ( ) ;            // 返回容器中第一个数据元素
+
+            back（）;           // 返回容器中最后一个数据元素
+
+   3.2.7 vector互换容器
+
+       实现两个容器内元素进行互换
+
+       函数原型：
+
+            swap ( vec ）；  // 将vec与本身的元素互换
+
+
+   3.2.8 vector预留空间
+
+        减少vector在动态扩展容量时的扩展次数
+
+       函数原型：
+
+        reserve ( int  len );  // 容器预留len个元素长度，预留位置不初始化，元素不可访问
+
+
+
+
+
