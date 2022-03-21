@@ -36,4 +36,69 @@
 
          deque ( n ,elem );            //构造函数将n个elem拷贝给本身
 
-         deque ( const deque &deq); // 拷贝构造函数      
+         deque ( const deque &deq); // 拷贝构造函数    
+
+   3.2.3  deque 赋值操作
+
+      功能描述：
+
+        给deque容器进行赋值
+
+       函数原型：
+
+           deque&  operator= (const deque &ded);   // 重载等号操作符
+
+           assign （ beg ，end);    //将（beg ，end）区间中的数据拷贝赋值给本身
+
+           assign （ n ， elem ）；  //将n个elem拷贝赋值给本身
+
+   3.2.4 deque 大小操作
+
+      功能描述：
+   
+         对deque容器的大小进行操作
+
+      函数原型：
+
+            deque . empty( );      //判断容器是否为空
+
+            deque . size( ) ;         //返回容器中元素的个数
+ 
+            deque.resize( num ); //重新指定容器的长度为num，若容器变长，则以默认值填充
+                                             //如果容器变短，则末尾超出容器长度的元素被删除。
+
+            deque.resize(num, elem);  //重新指定容器长度为num，若容器变长，则以elem值填充新位置
+                                                      //如果容器长度变短，则末尾超出容器长度的元素被删除
+
+   3.2.5 deque 插入和删除
+
+       功能描述：
+
+            向deque容器中插入和删除数据
+
+        函数原型：
+
+             两端插入操作：
+  
+                push_back (elem) ;    // 在容器尾部添加一个数据
+
+                push_front(elem);      //在容器头部插入一个数据
+
+                pop_back( );              //删除容器最后一个数据
+
+                pop_front( )；           //删除容器第一个数据
+
+       指定位置操作：
+
+                insert(pos, elem);      //在pos位置插入一个elem元素的拷贝，返回新数据位置
+
+                insert(pos, n , elem)  //在pos位置插入n个elem数据，无返回值
+
+                insert(pos, beg ,end ); //在pos位置插入（beg ，end）区间的数据，无返回值
+
+                clear( );                        //清空容器的所有数据
+
+                 erase(brg , end);         //删除（beg ，end）区间的数据，返回下一个数据的位置
+
+                 erase (pos);                //删除pos位置的数据，返回下一个数据的位置     
+            
