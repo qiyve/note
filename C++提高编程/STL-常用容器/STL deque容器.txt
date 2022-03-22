@@ -102,3 +102,28 @@
 
                  erase (pos);                //删除pos位置的数据，返回下一个数据的位置     
             
+   3.3.6 deque 数据存取
+
+       功能描述：
+
+           对deque中的数据存取操作
+
+        函数原型：
+
+            at ( int idx );       // 返回索引 idx所指的数据
+
+            operator [ ] ;      // 返回索引 idx所指的数据
+
+            front（）；        // 返回容器中第一个数据元素
+
+            back（）；        // 返回容器中最后一个数据元素 
+
+   3.3.7 deque 排序
+
+       功能描述：
+
+           利用算法实现对deque容器进行排序
+
+        算法：
+
+            sort ( iterator beg ,iterator end ) ;    // 对beg 和end 区间内元素进行排序
