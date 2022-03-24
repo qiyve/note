@@ -75,3 +75,39 @@
             find ( key );            //查找key是否存在，返回该键的元素的迭代器；若不存在，返回set.end（）；
 
             count (key);           //统计key的元素个数
+
+    3.8.6 set和multiset区别
+
+        功能描述:
+
+            掌握set和multiset的区别
+
+         区别：
+
+           - set 不可以插入重复数据，而multiset可以
+
+           - set插入数据的同时会返回插入结果，表示插入是否成功
+ 
+           - multiset不会检测数据，因此可以插入重复数据
+
+    3.8.7 pair对组创建
+
+        功能描述：
+   
+            成对出现的数据，利用队组可以返回两个数据
+
+        两种创建方式：
+
+            pair<type , tyep> p ( value1, value2 )；
+
+            pair<type,  type> p = make_pair( value1 ,value2 );
+
+    3.8.8 set容器排序
+
+         学习目标：
+
+            set容器默认排序规则从小到大，掌握如何改变排序规则
+
+         主要技术点：
+
+            利用仿函数，可以改变排序规则
