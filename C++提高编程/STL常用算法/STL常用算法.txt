@@ -187,4 +187,326 @@
            //end 结束迭代器
   
            //_pred  谓词
+
  
+  5.3 常用排序算法
+
+     学习目标：
+
+        掌握常用的排序算法
+
+     算法简介：
+
+        sort                     //对容器内元素进行排序
+
+        random_shuffle   //洗牌  指定范围内的元素随机调整次序
+
+        merge                  //容器元素合并，并存储到另一容器中
+
+        reverse                 //反转指定范围的元素
+
+    5.3.1 sort 
+
+       功能描述：
+
+          对容器内元素进行排序
+
+       函数原型：
+
+          sort ( iterator beg , iterator  end , _Pred ) ；
+
+          //按值查找元素，找到返回指定位置迭代器，找不到返回结束迭代器位置
+
+          // beg  开始迭代器
+
+          // end  结束迭代器
+
+          // _Pred 谓词
+
+    5.3.2 random_shuffle
+
+       功能描述：
+
+          洗牌 指定范围内的元素随机调整次序
+
+       函数原型：
+ 
+          random_shuffle( iterator beg, itreator end );
+
+          //指定范围内元素随机调整次序
+
+          //beg 开始迭代器
+
+          //end 结束迭代器
+
+    5.3.3 merge 
+
+      功能描述：
+
+         两个容器元素合并，并存储到另一个容器中
+  
+      函数原型：
+
+         merge( iterator beg1,iterator end1, iterator beg2, iterator end2, iterator dest );
+
+         //容器元素合并，并存储到里一个容器中
+
+         //注意：两个容器必须是有序的
+
+         //beg1 容器1 开始迭代器
+
+         //end1 容器1 结束迭代器
+
+         //beg2 容器2 开始迭代器
+
+         //end2 容器2 结束迭代器
+ 
+         //dest  目标容器开始迭代器
+
+    5.3.4  reverse
+
+     功能描述：
+
+         将容器内元素进行反转
+
+      函数原型：
+
+         reverse( iterator beg, iterator end );
+
+         //反转指定范围的元素
+
+         //beg 开始迭代器
+
+         //end 结束迭代器
+
+
+  5.4 、常用拷贝和替换算法
+
+      学习目标：
+ 
+         掌握常用的拷贝和替换算法
+
+     算法简介：
+ 
+        copy                   //容器内指定范围的元素拷贝到另一容器中
+
+        replace               //将容器内指定范围的旧元素修改为新元素
+
+        replace_if            //容器内指定范围满足条件的元素，替换为新元素
+
+        swap                  //互换两个容器的元素
+
+    5.4.1 comy
+ 
+      功能描述：
+
+        容器内指定范围的元素，拷贝到另一个容器中
+
+      函数原型：
+
+        copy ( iterator beg , iterator end , iterator dest) ;
+
+        //按值查找元素，找到返回指定位置迭代器，找不到返回结束迭代器位置
+
+        //beg 开始迭代器
+   
+        //end 结束迭代器
+
+        //dest 目标起始迭代器
+
+   5.4.2  replace 
+
+       功能描述：
+
+         将容器内指定范围的旧元素修改为新元素
+ 
+       函数原型：
+
+          replace (iterator beg , iterator end , oldvalue , newvalue);
+
+         //将区间内旧容器 替换成 新元素
+
+         //beg 开始迭代器
+
+         //end 结束迭代器
+
+         //oldvalue  旧元素
+
+         //newvalue 新元素
+
+    5.4.3 replace_if
+
+        功能描述：
+
+           将区间内满足条件的元素，替换成指定元素
+
+         函数原型:
+
+            replace_if ( iterator beg, iteraor end , _pred, newvalue);
+
+           //按条件替换元素， 满足条件的替换成指定元素
+
+           //beg 开始迭代器
+
+           //end 结束迭代器
+
+           //_Pred 谓词
+
+           // newvalue  替换的新元素
+
+    5.4.4 swap
+
+        功能描述：
+
+           互换两个容器的元素
+
+        函数原型：
+
+           swap( container  c1,container  c2);
+
+          //互换两个容器的元素
+
+          //c1 容器1
+
+          //c2 容器2
+
+
+  5.5 常用算术生成算法
+
+      学习目标：
+
+        掌握常用的算术生成算法
+
+      注意：
+ 
+        算术生成算法属于小型算法，使用时包含的头文件为#include<numeric>
+
+      算法简介：
+
+        accumulate              //计算器元素累计总和
+
+         fill                             //向容器中添加元素
+
+     5.5.1 accumulate 
+
+       功能描述：
+
+          计算区间内 容器元素累计总和
+
+       函数原型:
+
+          accumulate ( iterator beg , iterator end , value) ;
+
+          //计算容器元素累计总和
+
+          //beg 开始迭代器
+
+          //end 结束迭代器
+
+          //value 起始值      
+
+     5.5.2 fill
+
+       功能描述：
+
+           向容器中填充指定元素
+
+        函数原型：
+ 
+           fill ( iterator  beg,  iterator  end,  value) ;
+
+           //向容器中填充元素
+
+           //beg 开始迭代器
+
+           //end 结束迭代器
+
+           //value 填充的值
+
+   5.6、 常用集合算法
+
+       学习目标：
+
+          掌握常用的集合算法
+
+       函数原型：
+
+          算法简介：
+
+            set_intersection           //求两个容器的交集
+  
+            set_union                    //求两个容器的并集
+
+            set_difference             //求两个容器的差集
+
+     5.6.1 set_intersection
+
+      功能描述：
+
+          求两个容器的交集
+
+       函数原型：
+  
+          set_intersection( iterator beg1,  iterator end1, iterator beg2, iterator end2, iterator dest);
+
+         //求两个容器的交集
+
+         //注意：两个集合必须是有序序列
+
+         //beg1  容器1 开始迭代器
+
+         //end1  容器1 结束迭代器
+  
+         //beg2  容器2 开始迭代器
+
+         //end2  容器2 结束迭代器
+
+         //dest   目标容器开始迭代器
+
+    5.6.2 set_union
+
+       功能描述
+
+          求两个集合的并集
+
+        函数原型：
+
+          set_union( iterator beg1,  iterator end1, iterator beg2, iterator end2, iterator dest);
+
+          //求两个集合的并集
+
+         //注意：两个集合必须是 有序序列
+
+         //beg1  容器1 开始迭代器
+
+         //end1  容器1 结束迭代器
+  
+         //beg2  容器2 开始迭代器
+
+         //end2  容器2 结束迭代器
+
+         //dest   目标容器开始迭代器
+
+    5.6.3 set_difference
+
+       功能描述：
+
+         求两个集合的差集
+
+      函数原型
+
+          set_difference( iterator beg1,  iterator end1, iterator beg2, iterator end2, iterator dest);
+ 
+         // 求两个集合的差集
+
+         //注意：两个集合必须是 有序序列
+
+         //beg1  容器1 开始迭代器
+
+         //end1  容器1 结束迭代器
+  
+         //beg2  容器2 开始迭代器
+
+         //end2  容器2 结束迭代器
+
+         //dest   目标容器开始迭代器
