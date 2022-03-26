@@ -40,7 +40,8 @@ void test01()
 	cout << endl;
 
 	//½µÐò
-	sort(v.begin(), v.end(),MyCompare());
+	//sort(v.begin(), v.end(),MyCompare());
+	sort(v.begin(), v.end(), greater<int>());
 
 	for (vector<int>::iterator it = v.begin(); it != v.end(); it++)
 	{
