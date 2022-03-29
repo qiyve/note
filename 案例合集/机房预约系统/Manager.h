@@ -2,6 +2,14 @@
 #include<iostream>
 using namespace std;
 #include"Identity.h"
+#include<string>
+#include<fstream>
+#include"globalFile.h"
+#include"Student.h"
+#include"Teacher.h"
+#include<vector>
+#include<algorithm>
+#include"computerRoom.h"
 
 //管理员类设计
 class Manager :public Identity
@@ -29,5 +37,21 @@ public:
 	//清空机房数据
 	void cleanFile();
 
+	//初始化容器
+	void initVector();
 
+	//检测重复 参数1：检测学号/职工号  参数2：检测类型
+	bool checkRepeat(int id,int type);
+
+	//初始化机房容器
+	void initComputer();
+
+	//机房容器
+	vector<ComputerRoom>vCom;
+
+	//学生容器
+	vector<Student>vStu;
+
+	//教师容器
+	vector<Teacher>vTea;
 };
