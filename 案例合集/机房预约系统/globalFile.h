@@ -4,7 +4,7 @@
 #define ADMIN_FILE "admin.txt"
 
 //学生文件
-#define STEDENT_FILE "student.txt"
+#define STUDENT_FILE "student.txt"
 
 //教师文件
 #define TEACHER_FILE "teacher.txt"
