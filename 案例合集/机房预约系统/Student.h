@@ -2,6 +2,11 @@
 #include<iostream>
 using namespace std;
 #include"Identity.h"
+#include<string>
+#include"computerRoom.h"
+#include<vector>
+#include<fstream>
+#include"globalFile.h"
 
 //学生类
 class Student :public Identity
@@ -25,6 +30,9 @@ public:
 
 	//查看所有预约
 	void showAllOrder();
+
+	//机房容器
+	vector<ComputerRoom>vCom;
 
 	 //取消预约
 	void cancelOrder();
