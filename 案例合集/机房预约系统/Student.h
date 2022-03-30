@@ -7,6 +7,8 @@ using namespace std;
 #include<vector>
 #include<fstream>
 #include"globalFile.h"
+#include"orderFile.h"
+#include<stdlib.h>
 
 //Ñ§ÉúÀà
 class Student :public Identity
