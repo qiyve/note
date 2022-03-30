@@ -4,7 +4,6 @@
 Student::Student()
 {
 
-
 }
 
 //有参构造  参数：学号 姓名 密码
@@ -92,10 +91,15 @@ void Student::applyOrder()
 		cout << "输入有误，请重新输入" << endl;
 	}
 
-	cout << "请输入申请预约的机房" << endl;
-	cout << "1、一号机房容量：" << vCom[0].m_MaxNum << "人" << endl;
-	cout << "2、二号机房容量：" << vCom[1].m_MaxNum << "人" << endl;
-	cout << "3、三号机房容量：" << vCom[2].m_MaxNum << "人" << endl;
+	//cout << "请输入申请预约的机房" << endl;
+	//cout << "1、一号机房容量：" << vCom[0].m_MaxNum << "人" << endl;
+	//cout << "2、二号机房容量：" << vCom[1].m_MaxNum << "人" << endl;
+	//cout << "3、三号机房容量：" << vCom[2].m_MaxNum << "人" << endl;
+	cout << "请选择机房" << endl;
+	for (int i = 0;i < vCom.size(); i++)
+	{
+		cout << vCom[i].m_ComId << "号机房容量为：" << vCom[i].m_MaxNum << endl;
+	}
 
 	while (true) //选择机房
 	{
@@ -111,16 +115,16 @@ void Student::applyOrder()
 	cout << "预约成功,审核中" << endl;
 
 	ofstream ofs(ORDER_FILE, ios::app);//利用追加方式写文件
-	ofs << "date:" << date << " ";
-	ofs << "interval:" << interval << " ";
-	ofs << "stuId:" << this->m_Id << " ";
-	ofs << "stuName:" << this->m_Name << " ";
-	ofs << "roomId:" << room << " ";
-	ofs << "status:" << 1 << endl;
+	ofs << "date:" << date << " ";              //日期
+	ofs << "interval:" << interval << " ";      //时间段
+	ofs << "stuId:" << this->m_Id << " ";       //学生id
+	ofs << "stuName:" << this->m_Name << " ";   //学生姓名
+	ofs << "roomId:" << room << " ";            //机房编号
+	ofs << "status:" << 1 << endl;              //1：审核中状态
 
 	ofs.close();
 
-	system("pause");
+	::system("pause");
 	system("cls");
 
 }
@@ -128,14 +132,110 @@ void Student::applyOrder()
 //查看自身预约
 void Student::showMyOrder()
 {
+	OrderFile of;
+	//of.updateOrder();
 
+	if (of.m_Size == 0)
+	{
+		cout << "无预约记录!" << endl;
+		system("pause");
+		system("cls");
+		return;
+	}
+	for (int i = 0; i < of.m_Size; i++)
+	{ 
+		//string  转  int
+		//string  利用 .c_str  转  const char *
+		//利用 atoi( const char *) 转int
+	
+		//cout <<"学生编号："<<of.m_orderData[i]["stuId"] << endl;
 
+		if (this->m_Id == atoi(of.m_orderData[i]["stuId"].c_str()))//找到自身预约
+		{
+			cout << "预约的日期：周" << of.m_orderData[i]["date"];
+			cout << " 时间段：" << (of.m_orderData[i]["interval"] == "1" ? "上午" : "下午");
+			cout << " 机房号:" << of.m_orderData[i]["roomId"];
+
+			string status = "状态";
+			//1、审核中  2、预约成功 -1、预约失败  0、取消预约
+			if (of.m_orderData[i]["status"] == "1")
+			{
+				status += "审核中";
+			}
+			else if (of.m_orderData[i]["status"] == "2")
+			{
+				status += "预约成功";
+			}
+			else if (of.m_orderData[i]["status"] == "-1")
+			{
+				status += "预约失败，审核未通过";
+			}
+			else
+			{
+				status += "预约已取消";
+			}
+			cout << status << endl;
+		}
+	}
+
+	system("pause");
+	system("cls");
 }
 
 //查看所有预约
 void Student::showAllOrder()
 {
+	OrderFile of; //创建对象
 
+	if (of.m_Size == 0)
+	{
+		cout << "无预约记录" << endl;
+		system("pause");
+		system("cls");
+		return;
+	}
+
+	//遍历数据
+	for (int i = 0; i < of.m_Size; i++)
+	{
+		cout << i + 1 << "、";  //拼接显示第几条预约
+
+
+		cout << "预约日期：周" << of.m_orderData[i]["date"];
+		cout << " 时间段：" << (of.m_orderData[i]["interval"] == "1" ? "上午" : "下午");
+		cout << " 学号：" << of.m_orderData[i]["stuId"];
+		cout << " 姓名：" << of.m_orderData[i]["stuName"];
+		cout << " 机房号：" << of.m_orderData[i]["roomId"];
+		
+		//1、审核中  2、预约成功 -1、预约失败  0、取消预约
+		string status = " 状态：";
+
+		if (of.m_orderData[i]["status"] == "1")
+		{
+			status += "审核中";
+	    }
+
+		else if (of.m_orderData[i]["status"] == "2")
+		{
+			status += "预约通过";
+		}	
+
+		else if (of.m_orderData[i]["status"] == "-1")
+		{
+			status += "预约失败，审核未通过";
+		}	
+
+		else
+		{
+			status += "预约已取消";
+		}
+
+		cout << status << endl;
+	
+	}
+
+	system("pause");
+	system("cls");
 
 }
 
