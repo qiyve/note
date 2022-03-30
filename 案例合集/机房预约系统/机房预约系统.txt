@@ -336,5 +336,16 @@
 
              创建 orderFile.h 和 orderFile.cpp
 
+         8.3.2 显示自身预约
 
-           
+              首先我们先添加几条预约信息，可以利用程序添加或者手动在txt添加。
+    
+      8.4 取消预约
+
+            void Student :: cancelOrder() 中实现
+
+ 9、
+
+
+
+
