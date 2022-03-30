@@ -8,6 +8,44 @@ using namespace std;
 #include"Manager.h"
 #include"Teacher.h"
 
+//进入教师子菜单页面
+void teacherMenu(Identity* teacher)
+{
+	while (true)
+	{
+		teacher->operMenu(); //调用菜单界面
+
+	//将父类指针 转为子类指针 调用子类 其他接口
+		Teacher* tea = (Teacher*)teacher;
+
+		int select = 0;
+		cin >> select;
+		if (select == 1)  //查看所有预约
+		{
+			tea->showAllOrder();
+		}
+		else if (select == 2) //审核预约
+		{
+			tea->validOrder();
+		}
+		else if (select == 0)
+		{
+			delete teacher; //清空数据
+			cout << "注销成功" << endl;
+			system("pause");
+			system("cls");
+			break;
+		}
+		else
+		{
+			cout << "输入有误，请重新输入！" << endl;
+			system("pause");
+			system("cls");
+		}
+	}
+	
+
+}
 
 //进入学生子菜单界面
 void studentMenu(Identity* student)
@@ -197,6 +235,7 @@ void LoginIn(string fileName, int type)
 				person = new Teacher(id, name, pwd);//创建老师的对象
 
 				//进入教师身份子菜单
+				teacherMenu(person);
 
 				return;
 			}
