@@ -33,6 +33,11 @@ window中GCC 设置
 gcc编译过程：
 gcc -c  hello.exe  hello.c
 
+Qt使用：
+
+选择菜单栏“工具”--》”选项“--》”构建和运行“，在”概念“选项 下面找到”Default build directory“
+点击后面的”reset“按钮，之后关闭Qt，在重新打开 即可
+
 
    1.2 system函数
   
