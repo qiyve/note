@@ -1,0 +1,39 @@
+2、数据类型
+
+  2.1 常量与数据
+
+    2.1.1关键字
+
+     数据类型关键字（12）
+
+        char(字符)  short(短)  int(整)  long(长)  float(单精)  double(双精)  unsigned(无符号否定)
+        signed(有符号)  struct(定义结构体)  union(联合体) enum(枚举)  void(空类型)
+
+      控制语句关键字（12）
+
+        if else(判断)   switch case default(分支)   for  do while(循环)  break(分支循环退出) 
+        continue(结束本次执行下次)  gouto(无条件跳转)  return(函数中结束本函数，主函数结束程序)
+
+      其他关键字（3）
+
+       sizeof(字节)  typedef()   volatile()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
