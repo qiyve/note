@@ -53,7 +53,10 @@ int main()
 
 	for (int i = 0; i < 26; i++)
 	{
-		printf("字母：%c 出现次数%d\n", i + 'a', arr[i]);
+		if (arr[i]) //arr[i]!= 0
+		{
+			printf("字母：%c 出现次数%d\n", i + 'a', arr[i]);
+		}
 	}
 
 	return 0;
