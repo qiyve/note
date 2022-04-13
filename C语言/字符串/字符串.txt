@@ -1,0 +1,40 @@
+字符串拷贝
+   strcpy (char* dest, char* str)
+
+   有限拷贝
+  strncpy(char* dest, char* str, size_t  n)
+
+
+字符串追加
+    strcat (char* dest, char* str)
+  有限追加
+    strncat(char* dest, char* str, size_t  n)
+
+ 
+字符串比较
+     strcmp(char* dest, char* str)
+   有限
+     strncmp(char* dest, char* str, size_t  n)
+
+
+字符串格式化
+     sprintf(char* str, const char* format,....)
+     sscanf(char* str, const char* format,....)
+
+
+字符串查找
+     strstr(const char* haystack, const char* needle)
+    
+
+字符串分割
+     strtok(char* str, const char* delim)
+
+
+字符串类型转换
+     atoi(const char* nptr)
+     atoi()会扫描nptr字符串，跳过前面的空字符，直到遇到数字或正负号才开始做转换，
+  而遇到数字或字符串结束符（'\0'）才结束转换，并将结果返回
+
+     atof（）：把一个小数形式的字符串转化为一个浮点数
+     atol（）：把一个字符串转化为long类型
+
