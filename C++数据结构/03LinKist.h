@@ -17,8 +17,10 @@ typedef struct LINKLIST
 	int size;
 }LinkList;
 
-//打印回调函数
+//遍历函数指针
 typedef void(*PRINTNODE)(LinkList* data);
+//比较函数指针
+typedef int(*COMPARENODE)(LinkNode*, LinkNode*);
 
 //初始化链表
 LinkList* Init_LinkList();
@@ -27,7 +29,7 @@ void Insert_LinkList(LinkList* list, int pos, LinkNode* data);
 //删除
 void Remove_LinkList(LinkList* list, int pos);
 //查找
-int Find_LinkList(LinkList* list, LinkList* data);
+int Find_LinkList(LinkList* list, LinkNode* data, COMPARENODE compare);
 //返回链表大小
 int Size_LinkList(LinkList* list);
 //打印
