@@ -19,6 +19,19 @@ void MyPrint(LinkNode* data)
 	printf("Name:%s Age:%d\n", p->name, p->age);
 }
 
+int MyCompare(LinkNode* node1, LinkNode* node2)
+{
+	Person* p1 = (Person*)node1;
+	Person* p2 = (Person*)node2;
+
+	if (strcmp(p1->name , p2->name)==0 && p1->age == p2->age)
+	{
+		return 0;
+	}
+	
+	return -1;
+}
+
 int main()
 {
 	//创建链表
@@ -49,9 +62,21 @@ int main()
 	//打印
 	Print_LinkList(list, MyPrint);
 
+	//删除结点
+	Remove_LinkList(list, 3);
+	printf("------------\n");
+	Print_LinkList(list, MyPrint);
+
+	//查找
+	Person findP;
+	strcpy(findP.name, "aaa");
+	findP.age = 10;
+	int pos = Find_LinkList(list, (LinkNode*)&findP, MyCompare);
+	printf("位置：%d\n", pos);
+
 	//链表大小
-	int ret = Size_LinkList(list);
-	printf("链表大小：%d\n", ret);
+	int sum = Size_LinkList(list);
+	printf("链表大小：%d\n", sum);
 
 	//释放
 	FreeSpace_LinkList(list);
