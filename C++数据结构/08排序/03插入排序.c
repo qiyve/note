@@ -32,12 +32,15 @@ void InsertSort(int arr[], int len)
 	{
 		if (arr[i] < arr[i - 1])
 		{
-			int temp = arr[i];
+			int temp = arr[i];//缓存当前位置的值
+
+			//满足条件向前移动
 			for (j = i - 1; j >= 0 && temp < arr[j]; j--)
 			{
+				//交换
 				arr[j + 1] = arr[j];
 			}
-			arr[j + 1] = temp;
+			arr[j + 1] = temp; 
 		}
 	}
 }
