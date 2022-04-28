@@ -148,6 +148,16 @@ xor    0100                ——>       &     0100           ———>
 
 
 
+通用寄存器：
 
-
+        寄存器                                  编号(二进制)        编号（十进制）
+ 32位    |   16位   |  8位                         
+ EAX     |  AX      |  AL                      000                         0
+ ECX     |  CX      |  CL                      001                         1
+ EDX    |  DX      |  DL                      010                         2
+ EBX     |  BX      |  BL                       011                         3
+ ESP     |  SP      |  AH                      100                         4
+ EBP     |  BP      |  CH                      101                         5
+ ESI      |  SI       |  DH                      110                         6
+ EDI     |  DI      |   BH                       111                        7
 
