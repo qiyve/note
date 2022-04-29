@@ -1,0 +1,30 @@
+2、 ADD指令（加法）
+含义：前者与后者相加，结果赋值给前者
+
+ADD AL,imm8
+
+ADD AX,imm16
+
+ADD EAX,imm32
+
+ADD r/m8,imm8
+
+ADD r/m16,imm16
+
+ADD r/m32,imm32
+
+ADD r/m16,imm8
+
+ADD r/m32,imm8
+
+ADD r/m8,r8
+
+ADD r/m16，r16
+
+ADD r/m32, r32
+
+ADD r8, r/m8
+
+ADD r16, r/m16
+
+ADD r32,r/m32

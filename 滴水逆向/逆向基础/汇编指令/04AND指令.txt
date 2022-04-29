@@ -1,0 +1,24 @@
+AND( 与 & ) 指令
+都为1的时候才为1
+
+AND AL,  imm8
+
+AND AX,  imm16
+
+AND EAX,  imm32
+
+AND r/m8, imm8
+
+AND r/m16, imm16
+
+AND r/m32, imm32
+
+AND r/m16, imm8
+
+AND r/m32, imm8
+
+AND r/m8,  r8
+
+AND r/m16, r16
+
+AND r/m32, r32

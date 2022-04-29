@@ -1,0 +1,31 @@
+
+异或  XOR （ ^） 指令
+不一样的为 1 
+
+XOR  AL,imm8
+
+XOR  AX,imm16
+
+XOR  EAX,imm32
+
+XOR  r/m8,imm8
+
+XOR  r/m16,imm16
+
+XOR  r/m32,imm32
+
+XOR  r/m16,imm8
+
+XOR  r/m32,imm8
+
+XOR  r/m8,r8
+
+XOR  r/m16，r16
+
+XOR  r/m32, r32
+
+XOR  r8, r/m8
+
+XOR  r16, r/m16
+
+XOR  r32,r/m32

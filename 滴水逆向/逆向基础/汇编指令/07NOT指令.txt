@@ -1,0 +1,8 @@
+
+非   NOT （ ！）指令
+
+     NOT  r/m8
+ 
+     NOT  r/m16
+
+     NOT  r/m32

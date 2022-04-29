@@ -1,0 +1,26 @@
+
+SUB指定
+功能：从目的操作数中减去源操作数
+SUB  目标操作数， 源操作数
+
+SUB AL, imm8
+
+SUB AX, imm16
+
+SUB EAX, imm32
+
+SUB r/m8, imm8
+
+SUB r/m16, imm16
+
+SUB r/m32, imm32
+
+SUB r/m16, imm8
+
+SUB r/m32, imm8
+
+SUB r/m8, r8
+
+SUB r/m16, r16
+
+SUB r/m32, r32

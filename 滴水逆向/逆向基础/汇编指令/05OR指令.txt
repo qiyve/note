@@ -1,0 +1,31 @@
+
+OR（或 | ）指令
+有一个为1 就为 1 
+
+OR AL,  imm8
+
+OR AX,  imm16
+
+OR EAX,  imm32
+
+OR r/m8, imm8
+
+OR r/m16, imm16
+
+OR r/m32, imm32
+
+OR r/m16, imm8
+
+OR r/m32, imm8
+
+OR r/m8,  r8
+
+OR r/m16, r16
+
+OR r/m32, r32
+
+OR r8, r/m8
+
+OR r16, r/m16
+
+OR r32,r/m32
