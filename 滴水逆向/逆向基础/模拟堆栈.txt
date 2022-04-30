@@ -1,0 +1,30 @@
+模拟堆栈
+  
+	1.利用两个32位的通用寄存器模拟堆栈的 栈顶、栈底，TOP，BASE。里面存储内存单元编号
+ 	2.BASE里面存储了一个地址，记录的起始地址、   栈底
+	3.TOP里面也存储了一个地址，记录结束的地址、 栈顶
+	4.存入数据的时候，TOP的值减4（为了方便观察，每次存取都是4个字节）
+	5.释放数据的时候，TOP的值加4（为了方便观察，每次存取都是4个字节）
+	6如果要取中间的某个值的时候可以通过TOP 或者 BASE 加上便宜的方式读取
+	7.堆栈的优点：临时存储大量的数据，便于查找
+
+
+压入数据 /压栈
+
+ 	MOV  EBX,  0X13FFDC              BASE
+	MOV  EDX, 0X13FFDC               TOP
+
+           方式一：
+
+                MOV  DWORF PTR DS:[ EDX-4 ],  0XAAAAAAAA
+	SUB    EDX,  4            //更新栈顶位置
+            
+            方式二：
+	
+	SUB  EDX, 4
+	MOV  DWORD  PTR DS:[EDX] , 0XBBBBBBBB	
+
+            方式三：
+ 
+                LEA  EDX,  DWORD  PTR  DS:[ EDX-4 ]
+	MOV  WDORD PTR DS:[ EDX ],  0XCCCCCCCC
