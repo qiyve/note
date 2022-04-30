@@ -16,15 +16,53 @@
 
            方式一：
 
-                MOV  DWORF PTR DS:[ EDX-4 ],  0XAAAAAAAA
+                MOV  DWORF PTR DS:[ EDX-4 ],  0xAAAAAAAA
 	SUB    EDX,  4            //更新栈顶位置
             
             方式二：
 	
 	SUB  EDX, 4
-	MOV  DWORD  PTR DS:[EDX] , 0XBBBBBBBB	
+	MOV  DWORD  PTR DS:[EDX] , 0xBBBBBBBB	
 
             方式三：
  
-                LEA  EDX,  DWORD  PTR  DS:[ EDX-4 ]
-	MOV  WDORD PTR DS:[ EDX ],  0XCCCCCCCC
+                 MOV  DWORD  PTR DS:[ EDX-4 ], 0xDDDDDDDD  
+
+           方式四：
+
+ 	LEA  EDX,  DWORD  PTR  DS:[ EDX-4 ]
+	MOV  WDORD PTR DS:[ EDX ],  0xFFFFFFFF
+
+
+读取第n个数
+
+	1.方式一：通过BASE加偏移来读取
+
+	读取第一个入栈数据
+ 	MOV ESI,  DWORD  PTR DS:[ EBX -4 ]
+
+	读取第四个入栈的数据
+	MOV  ESI,  DWORD  PTR DS:[ EBX-0x10 ]
+
+	2.方式二： 通过TOP加偏移读取
+
+	读取第二个入栈的数据
+                MOV  EDI,  DWORD PTR DS: [ EDX+4]
+
+	读取第三个压入的数据:
+ 	MOV EDI,  DWORD  PTR  DS:[  EDX+8 ]
+
+
+弹出数据
+ 
+ 	方式一：
+	MOV  ECX,  DWORD  PTR  DS:[ EDX ]
+	LEA   EDX,  DWORD  PTR  DS:[ EDX+4]
+
+	方式二：
+	MOV  ESI,  DWORD  PTR  DS:[ EDX ]
+	ADD EDX,  4
+
+	方式三:
+	LEA  EDX,  DWORD  PTR  DS:[ EDX+4]
+	MOV EDI,  DWORD  PTR  DS:[ EDX-4 ]	
