@@ -1,0 +1,28 @@
+
+总结： push根pop跟容器宽度有关、
+
+PUSH 指令：
+不可以push八位内存或寄存器
+push 16位内存/寄存器 占2个字节
+push 32位内存/寄存器 占4个字节   
+push 立即数都是占 4 字节
+
+	1.PUSH  r32
+	2.PUSH  r16
+	3.PUSH  m16
+	4.PUSH  m32
+	5.PUSH  imm8/imm16/imm32 
+
+POP 指令
+
+	1.POP  r32
+	2.POP  r16
+	3.POP  m16
+	4.POP  m32
+
+
+PUSHAD指令
+功能：把八个寄存器存储在堆栈，保存现场
+
+POPAD指令：
+功能：恢复现场
