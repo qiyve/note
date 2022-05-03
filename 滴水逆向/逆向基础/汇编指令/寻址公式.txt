@@ -1,0 +1,79 @@
+
+总结：MOV 和 LEA区别 ：mov找内存中的值，LEA 找内存编号（内存地址），
+
+寻址公式一： [立即数]
+
+	读取内存的值
+	MOV  EAX,   DWORD   PTR  DS :[ 0x13FFC4 ]
+	MOV  EAX,   DWORD   PTR  DS :[ 0x13FFC8 ]
+
+	像内存中写入数据：
+	MOV   DWORD  PTR  DS :[ 0x13FFC4 ], eax
+	MOV   DWORD  PTR  DS :[ 0x13FFC8 ], ebx
+
+	获取内存编号
+	LEA  EAX,   DWORD PTR  DS: [ 0x13FFC4 ]
+	LEA  EAX,   DWORD PTR  DS: [ ESP+8 ]
+
+
+寻址公式二：[ reg ] reg代表寄存器  可以是8个通用寄存器中的任意一个
+
+	读取内存的值
+	MOV  ECX, 0x13FFD0
+	MOV  EAX,  DWORD  PTR DS: [ ECX ]
+
+	向内存中写入数据：
+	MOV   EDX,   0x13FFD8
+	MOV  DWORD  PTR  DS:[ EDX ], 0x87654321
+	
+ 	获取内存编号
+ 	LEA   EAX ,DWORD  PTR DS:[ EDX ] 
+ 	MOV  EAX,  DWORD  PTR  DS:[ EDX ]
+
+
+寻址方式三：[ reg+立即数 ]
+
+	读取内存的值
+	MOV  ECX,  0x13FFD0
+	MOV  EAX,  DWORD  PTR  DS:[ ECX+4 ]
+
+	向内存中写入数据
+ 	MOV  EDX,  0x13FFD8
+	MOV  DWORD  PTR DS:[ EDX+0+0xC ], 0x87654321
+
+	获取内存编号
+	LEA  EAX,  DWORD  PTR  DS:[ EDX+4 ]
+ 	MOV  EAX,  DWORD PTR DS:[ EDX+4 ]
+
+
+寻址公式四：[ reg+reg*{1,2,4,8} ]
+
+  	读取内存的值
+	MOV  EAX, 13FFC4
+	MOV  ECX,  2
+	MOV  EDX,  DWORD  PTR  DS:[ EAX+ECX*4 ]
+	
+	向内存中写入数据：
+ 	MVO  EAX,  13FFC4
+	MOV  ECX,  2
+	MOV  DWORD  PTR  DS:[ EAX+ECX*4 ], 87654321
+
+	读取内存编号
+	LEA  EAX,  DWORD  PTR DS:[ EAX+ECX*4 ]
+
+寻址公式五：[ reg+reg*{1,2,4,8}+立即数 ]
+
+ 	读取内存的值
+	MOV  EAX,  13FFC4 
+	MOV  ECX,  2
+	MOV  EDX,  DWORD  PTR  DS:[ EAX+ECX*4+4 ]
+
+	向内存中写入数据
+	MOV  EAX,  13FFC4
+	MOV  ECX,  2
+	MOV  DWORD  PTR  DS:[ EAX+ECX*4+4 ], 87654321
+
+	获取内存编号
+	LEA  EAX,  DWORD  PTR DS:[ EAX+ECX*4+2 ]
+
+
