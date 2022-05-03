@@ -1,0 +1,47 @@
+
+ADC指令：带进位加法
+
+	格式： ADC  R/M,  R/M/IMM    两边不能同时为内存   宽度要一样
+	
+	ACC   AL，CL
+	ADC  BYTE  PTR  DS:[ 12FFC4 ],  2
+	ADC  BYTE  PTR  DS:[ 12FFC4 ],  AL
+
+
+SBB指令： 带借位减法
+
+	格式： SBB  R/M,  R/M/IMM     两边不能同时为内存   宽度要一样
+	
+	SBB   AL,  CL
+
+	SBB  BYTE  PTR  DS:[ 12FFC4 ], 2
+	SBB  BYTE  PTR  DS:[ 12FFC4 ], AL
+
+XCHG指令：交换数据
+
+	格式：XCHG R/M,  R/M       两边不能同时为内存   宽度要一样
+
+	XCHG  AL,  CL
+
+	XCHG  DWORD PTR  DS:[ 12FFC4 ], EAX
+	XCHG  BYTE   PTR  DS:[ 12FFC4 ], AL
+
+MOVS指令： 移动数据  内存-内存
+
+	BYTE/WORD/DWORD 
+
+	MOVS  BYTE PTR ES:[ EDI ],  BYTE  PTR DS:[ ESI ]
+	MOVS  WORD PTR  ES:[ EDI ],  BYTE PTR DS:[ ESI ] 
+ 	MOVS  DORD  PTR  ES:[ EDI ],  BYTE PTR DS:[ ESI ]
+
+       例子：
+
+	MOV  EDI,  12FFD8
+	MOV  ESI,   12FFD8
+ 	
+	MOV  DWORD  PTR  ES:[ EDI ], DWORD PTR DS:[ ESI ]        //观察EDI的值
+	MOV  DWORD  PTR  ES:[ EDI ], DWORD PTR DS:[ ESI ]
+	MOV  DWORD  PTR  ES:[ EDI ], DWORD PTR DS:[ ESI ]         
+	MOV  DWORD  PTR  ES:[ EDI ], DWORD PTR DS:[ ESI ]
+	MOV  DWORD  PTR  ES:[ EDI ], DWORD PTR DS:[ ESI ]
+	  
