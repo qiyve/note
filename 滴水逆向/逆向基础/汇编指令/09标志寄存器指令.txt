@@ -30,9 +30,9 @@ MOVS指令： 移动数据  内存-内存
 
 	BYTE/WORD/DWORD 
 
-	MOVS  BYTE PTR ES:[ EDI ],  BYTE  PTR DS:[ ESI ]
-	MOVS  WORD PTR  ES:[ EDI ],  BYTE PTR DS:[ ESI ] 
- 	MOVS  DORD  PTR  ES:[ EDI ],  BYTE PTR DS:[ ESI ]
+	MOVS  BYTE PTR ES:[ EDI ],  BYTE  PTR DS:[ ESI ]     	简写： MOVSB
+	MOVS  WORD PTR  ES:[ EDI ],  WORD PTR DS:[ ESI ] 		简写： MOVSW
+ 	MOVS  DORD  PTR  ES:[ EDI ],  DWORD PTR DS:[ ESI ]		简写： MOVSD
 
        例子：
 
@@ -45,3 +45,45 @@ MOVS指令： 移动数据  内存-内存
 	MOV  DWORD  PTR  ES:[ EDI ], DWORD PTR DS:[ ESI ]
 	MOV  DWORD  PTR  ES:[ EDI ], DWORD PTR DS:[ ESI ]
 	  
+	修改标志寄存器中D位的值，然后在执行下面的指令
+
+	MOV  EDI,  12FFD8
+	MOV  ESI,   12FFD0
+
+	MOVS  DWORD  PTR  ES:[ EDI ],  DWORD  PTR  DS:[ ESI ]
+	MOVS  DWORD  PTR  ES:[ EDI ],  DWORD  PTR  DS:[ ESI ]      //观察EDI的值
+	MOVS  DWORD  PTR  ES:[ EDI ],  DWORD  PTR  DS:[ ESI ]
+	MOVS  DWORD  PTR  ES:[ EDI ],  DWORD  PTR  DS:[ ESI ]
+
+
+
+STOS指令：将AL/AX/EAX的值存储到[ EDI ] 指定的内存单元     存储多少根宽度有关
+
+	STOS  BYTE  PTR  ES:[ EDI ]            简写为 STOSB
+
+	STOS  WORD  PTR  ES:[ EDI]         简写为 STOSW
+
+	STOS  DWORD  PTR  ES:[ EDI ]       简写为STOSD 　
+
+        例如：	
+	MOV  EAX,  12345678
+	MOV  EDI,   12FFC4
+	STOS  BYTE  PTR  ES:[ EDI ]          //观察EDI的值
+ 	STOS  WORD  PTR  ES:[ EDI ] 
+	STOS  DWORD  PTR  ES:[ EDI ] 
+
+
+	修改标志寄存器中D位的值，然后在执行下面的指令     位置编号的 加减 由DF位决定
+
+	MOV  EAX,  12345678
+	MOV  EDI,   12FFC4
+	STOS  BYTE  PTR  ES:[ EDI ]          //观察EDI的值
+ 	STOS  WORD  PTR  ES:[ EDI ] 
+	STOS  DWORD  PTR  ES:[ EDI ]
+
+
+REP指令：按计数寄存器(ECX) 中指定的次数重复执行字符串命令
+
+	MOV    EAX,  10
+	REP    MOVSD
+	REP    STOSD
