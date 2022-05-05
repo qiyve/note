@@ -3,7 +3,7 @@ ADC指令：带进位加法
 
 	格式： ADC  R/M,  R/M/IMM    两边不能同时为内存   宽度要一样
 	
-	ACC   AL，CL
+	ADC   AL，CL
 	ADC  BYTE  PTR  DS:[ 12FFC4 ],  2
 	ADC  BYTE  PTR  DS:[ 12FFC4 ],  AL
 
