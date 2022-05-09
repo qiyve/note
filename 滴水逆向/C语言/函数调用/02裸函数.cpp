@@ -22,7 +22,7 @@ int __declspec(naked)Plus(int x, int y, int z)
 		push ebp
 		//提升堆栈
 		mov ebp, esp
-		sub esp, 0x20
+		sub esp, 0x40
 		//保存现场
 		push ebx
 		push esi
@@ -31,12 +31,14 @@ int __declspec(naked)Plus(int x, int y, int z)
 		mov eax, 0xCCCCCCCC
 		mov ecx, 0x10
 		lea edi, dword ptr ds : [ebp - 0x40]
-		rep stosd
-		//局部变量
-		mov dword ptr ds : [ebp - 0x4] , 0x2
-		mov dword ptr ds : [ebp - 0x8] , 0x3
-		mov dword ptr ds : [ebp - 0xc] , 0x4
-		//函数功能
+		rep stosd		
+		//该方法真正要执行的功能
+
+		//局部变量 ebp-4      参数ebp+8
+		mov dword ptr ds : [ebp - 0x4] , 2
+		mov dword ptr ds : [ebp - 0x8] , 3
+		mov dword ptr ds : [ebp - 0xc] , 4		
+
 		mov eax, dword ptr ds : [ebp + 0x8]
 		add eax, dword ptr ds : [ebp + 0xc]
 		add eax, dword ptr ds : [ebp + 0x10]
