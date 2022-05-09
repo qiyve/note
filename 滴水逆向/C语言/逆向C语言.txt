@@ -17,7 +17,7 @@ void  __declspec(nakecd) Function()
 常见的几种调用约定
 
 调用约定      |     参数压栈顺序        |  平衡堆栈  
-__edecl        |     从右至左入栈        |  调用者清理栈	
+__cdecl        |     从右至左入栈        |  调用者清理栈	
 __stdcall      |   从右至左入栈          |  自身清理堆栈
 __fastcall     |  ECX/EDX传送前两个 |   自身清理堆栈
                    | 剩下:从右至左入栈     |	
