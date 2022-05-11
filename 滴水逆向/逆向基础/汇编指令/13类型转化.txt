@@ -1,0 +1,17 @@
+
+ 类型转化
+
+	MOVSX   先符号位扩展，在传输
+	
+	MOV   AL,  0xFF
+	MOVSX   CX,  AL
+	MOV  AL,  80
+	MOVSX   CX,  AL
+
+
+	MOVZX  先零扩展，在传送
+
+	MOV     AL,   0xFF
+	MOVZX    CX,  AL
+	MOV    AL,     80
+	MOVSX    CX,  AL	
