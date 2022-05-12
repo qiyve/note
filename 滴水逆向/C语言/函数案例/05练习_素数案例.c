@@ -1,39 +1,34 @@
 #include<stdio.h>
 
-void  prime(int num)
+int  prime(int num)
 {
 	int i = 2;
-	//循环次数
-	//int j = num - 1;
-	if (num >= i)
+	int r = 1;
+
+	while (i < num)
 	{
-		while (num)
+		if (num % i == 0)
 		{
-			if (num % i == 0)
-			{
-				printf("该数不是素数\n");
-				
-				break;
-			}
-			else
-			{
-				printf("该数为素数\n");
-				break;
-			}
-			i++;
-			//j--;
+			r = 0;
+			break;
 		}
+		i++;
 	}
-	else
-	{
-		printf("该数为素数\n");
-	}
+	return r;
 }
 
 int main()
 {
-	prime(110);
+	int x = prime(29);
+	if (x == 1)
+	{
+		printf("该数是素数");
+	}
+	else
+	{
+		printf("该数不是素数");
+	}
 
-	
 	return 0;
 }
+
