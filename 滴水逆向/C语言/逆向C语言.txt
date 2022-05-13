@@ -142,18 +142,22 @@ if...else if.....else if....else 多分支语句的反汇编判断
 练习：
 1、返回值超过32位时，存在哪里？用long long(__int64)类型做实验？
 
-返回值存在堆栈中，编译器会先利用EAX辅助 存储64位的局部变量，利用两块四字节的内存存储
+返回值存在堆栈中，编译器会先利用EAX辅助 存储在两个32位的局部变量，利用两块四字节的内存存储
 	long long x = 0x1234567890;
 00061785  mov         eax,12h  
 0006178A  mov         dword ptr [ebp-0Ch],34567890h  
 00061791  mov         dword ptr [ebp-8],eax
+                 return x;  返回值
+00351015  mov         eax,dword ptr [x]  
+00351018  mov         edx,dword ptr [ebp-4] 
 
-返回值通过eax跟edx传出
+返回值通过eax跟edx传出，edx存储的是高位
 
 
 2、char arr[3] = {1,2,3};与 char arr[4] = {1,2,3,4};
 哪个更节省空间，从反汇编的角度来说明你的观点
 
+分配的空间都一样
 
 
 
