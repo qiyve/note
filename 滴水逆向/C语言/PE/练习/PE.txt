@@ -1,0 +1,68 @@
+1、 DOC头：     62字节
+WORD	e_ magic ;    	// 54 4D     * MZ头
+WORD	e_ cblp;		// 00 90		
+WORD	e_ _cp;		// 00 03
+WORD	e_ crlc;		// 00 00
+WORD	e_ cparhdr ;	// 00 04
+WORD	e_ minalloc;	// 00 00
+WORD	e_ maxalloc ;	// FF FF
+WORD	e_ ss;		// 00 00
+WORD	e_ _sp;		// 00 B8
+WORD	e_ csum;		// 00 00
+WORD	e_ ip;		// 00 00
+WORD	e_ cs;		// 00 00
+WORD	e_ lfarlc;		// 00 40
+WORD	e_ ovno ;		// 00 00
+WORD	e_ res [4] ;	// 00 00 00 00 00 00 00 00 
+WORD	e_ oemid ;	// 00 00
+WORD	e_ oeminfo;	// 00 00
+WORD	e_ res2[10] ;	//  20个00 
+DWORD	e_ lfanew;		// 00 00 00 F8    * PE头文件地址    
+
+2、标准PE头      20字节
+PE标志				// 50 45 00 00
+WORD	Machine ; 		// 01 4C   运行平台 *
+WORD	NumberOfSections ;	// 00 04    区段数目
+DWORD	TimeDateStamp ;		// 4D D1 F5 80
+DWORD	PointerToSymbolTable;	// 00 00 00 00
+DWORD	NumberOfSymbols ;	// 00 00 00 00    
+WORD	SizeOfOptionalHeader ;	// 00 E0       可选头大小*
+WORD	Characteristics;                   	// 01 0F      特征/特性 *
+
+3、可选PE头     
+WORD Magic;			// 01 B0
+BYTE MajorLinkerVersion;		// 06
+BYTE Minorl .inkerVersion;		// 00
+DWORD SizeOfCode;		// 00 04 50 00
+DWORD SizeOflnitializedData;		// 00 02 80 00
+DWORD SizeOfUninitializedData;	// 00 00 00 00
+DWORD AddressOfEntryPoint;	// 00 04 41 EC          *
+DWORD BaseOfCode;		// 00 00 10 00
+DWORD BaseOfData;		// 00 04 60 00
+DWORD ImageBase;		// 00 40 00 00           *
+DWORD SectionAlignment;		// 00 00 10 00
+DWORD FileAlignment;		// 00 00 10 00
+WORD MajorOperatingSystemVersion;   // 00 04
+WORD MinorOperatingSystemVersion;	// 00 00
+WORD MajorlmageVersion;		// 00 00
+WORD MinorlmageVersion;		// 00 00
+WORD MajorSubsystemVersion;	// 00 04
+WORD MinorSubsystemVersion;	// 00 00
+DWORD Win32VersionValue;		// 00 00 00 00 
+DWORD SizeOflmage;		// 00 06 E0 00
+DWORD SizeOfHeaders;		// 00 00 10 00
+DWORD CheckSum;			// 00 00 00 00
+WORD Subsystem;			// 00 02
+WORD DIICharacteristics;		// 00 00 
+DWORD SizeOfStackReserve;		// 00 10 00 00 
+DWORD SizeOfStackCommit;		// 00 00 10 00
+DWORD SizeOfHeapReserve;		// 00 10 00 00
+DWORD SizeOfHeapCommit;		// 00 00 10 00
+DWORD LoaderFlags;		// 00 00 00 00
+DWORD NumberOfRvaAndSizes;	// 00 00 00 10
+_IMAGE_ DATA_ DIRECTORY DataDirectory[16];
+
+
+
+
+
