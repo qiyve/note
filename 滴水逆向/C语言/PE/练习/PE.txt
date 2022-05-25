@@ -1,5 +1,5 @@
 1、 DOC头：     62字节
-WORD	e_ magic ;    	// 54 4D     * MZ头
+WORD	e_ magic ;    	// 54 4D     * MZ 判断是否为可执行文件
 WORD	e_ cblp;		// 00 90		
 WORD	e_ _cp;		// 00 03
 WORD	e_ crlc;		// 00 00
@@ -17,31 +17,31 @@ WORD	e_ res [4] ;	// 00 00 00 00 00 00 00 00
 WORD	e_ oemid ;	// 00 00
 WORD	e_ oeminfo;	// 00 00
 WORD	e_ res2[10] ;	//  20个00 
-DWORD	e_ lfanew;		// 00 00 00 F8    * PE头文件地址    
+DWORD	e_ lfanew;		// 00 00 00 F8    * PE头对于文件的偏移 定位PE文件用    
 
 2、标准PE头      20字节
 PE标志				// 50 45 00 00
-WORD	Machine ; 		// 01 4C   运行平台 *
-WORD	NumberOfSections ;	// 00 04    区段数目
-DWORD	TimeDateStamp ;		// 4D D1 F5 80
+WORD	Machine ; 		// 01 4C     运行平台 *
+WORD	NumberOfSections ;	// 00 04      节的总数
+DWORD	TimeDateStamp ;		// 4D D1 F5 80   时间戳：文件创建时间
 DWORD	PointerToSymbolTable;	// 00 00 00 00
 DWORD	NumberOfSymbols ;	// 00 00 00 00    
-WORD	SizeOfOptionalHeader ;	// 00 E0       可选头大小*
-WORD	Characteristics;                   	// 01 0F      特征/特性 *
+WORD	SizeOfOptionalHeader ;	// 00 E0    可选PE头大小* 32位 E0h；64位F0h
+WORD	Characteristics;                   	// 01 0F    每个位有不同的含义，可执行文件值10F 即0 1 2 3 8 位置 1
 
 3、可选PE头     
-WORD Magic;			// 01 B0
+WORD Magic;			// 01 B0   说明文件类型：10B 32位下PE文件； 20B 64位下
 BYTE MajorLinkerVersion;		// 06
 BYTE Minorl .inkerVersion;		// 00
-DWORD SizeOfCode;		// 00 04 50 00
-DWORD SizeOflnitializedData;		// 00 02 80 00
-DWORD SizeOfUninitializedData;	// 00 00 00 00
-DWORD AddressOfEntryPoint;	// 00 04 41 EC          *
-DWORD BaseOfCode;		// 00 00 10 00
-DWORD BaseOfData;		// 00 04 60 00
-DWORD ImageBase;		// 00 40 00 00           *
-DWORD SectionAlignment;		// 00 00 10 00
-DWORD FileAlignment;		// 00 00 10 00
+DWORD SizeOfCode;		// 00 04 50 00   所有代码节的和，必须是FileAlignment的整数倍 编译器填的  没用
+DWORD SizeOflnitializedData;		// 00 02 80 00   已初始化数据大小的和，FileAlignment的整数倍 编译器填的  没用
+DWORD SizeOfUninitializedData;	// 00 00 00 00   未初始化数据大小的和，与上述一致
+DWORD AddressOfEntryPoint;	// 00 04 41 EC   程序入口
+DWORD BaseOfCode;		// 00 00 10 00    代码开始的基址
+DWORD BaseOfData;		// 00 04 60 00    数据开始的基址
+DWORD ImageBase;		// 00 40 00 00    内存镜像的基址       *
+DWORD SectionAlignment;		// 00 00 10 00    内存对齐  老：200   新：1000
+DWORD FileAlignment;		// 00 00 10 00    数据对齐    默认 1000
 WORD MajorOperatingSystemVersion;   // 00 04
 WORD MinorOperatingSystemVersion;	// 00 00
 WORD MajorlmageVersion;		// 00 00
@@ -49,18 +49,18 @@ WORD MinorlmageVersion;		// 00 00
 WORD MajorSubsystemVersion;	// 00 04
 WORD MinorSubsystemVersion;	// 00 00
 DWORD Win32VersionValue;		// 00 00 00 00 
-DWORD SizeOflmage;		// 00 06 E0 00
-DWORD SizeOfHeaders;		// 00 00 10 00
-DWORD CheckSum;			// 00 00 00 00
+DWORD SizeOflmage;		// 00 06 E0 00    内存中整个PE文件额映射的尺寸，可以比实际的值大SectionAlignment的整数倍
+DWORD SizeOfHeaders;		// 00 00 10 00    所以头+节表按照文件对齐后的大小，否则加载会出错
+DWORD CheckSum;			// 00 00 00 00    效验和，一些系统文件有要求，用来判断文件是否被修改
 WORD Subsystem;			// 00 02
 WORD DIICharacteristics;		// 00 00 
-DWORD SizeOfStackReserve;		// 00 10 00 00 
-DWORD SizeOfStackCommit;		// 00 00 10 00
-DWORD SizeOfHeapReserve;		// 00 10 00 00
-DWORD SizeOfHeapCommit;		// 00 00 10 00
-DWORD LoaderFlags;		// 00 00 00 00
-DWORD NumberOfRvaAndSizes;	// 00 00 00 10
-_IMAGE_ DATA_ DIRECTORY DataDirectory[16];
+DWORD SizeOfStackReserve;		// 00 10 00 00   初始化时保留的堆栈大小
+DWORD SizeOfStackCommit;		// 00 00 10 00   初始化时实际提交的大小
+DWORD SizeOfHeapReserve;		// 00 10 00 00   初始化时保留的堆大小
+DWORD SizeOfHeapCommit;		// 00 00 10 00   初始化时实际提交的大小
+DWORD LoaderFlags;		// 00 00 00 00   
+DWORD NumberOfRvaAndSizes;	// 00 00 00 10    目录项目数
+_IMAGE_ DATA_ DIRECTORY DataDirectory[16];      
 
 
 
