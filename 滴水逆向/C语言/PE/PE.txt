@@ -28,3 +28,15 @@ malloc 注意事项
  4.初始化
  5.使用完清空堆区
  6.指针值设为NULL
+
+
+重点：
+
+PE文件的第一个部分是IMAGE_DOS_HEADER，大小为64B，这里面有两个重要的数据成员。
+第一个为e_magic，这个必须为MZ，即0x5A4D。当然，0x5A4D这是典型的小端格式（Little Endian）；
+另一个重要的数据成员是最后一个成员e_lfanew，这个成员的值为IMAGE_NT_HEADERS的偏移
+
+在一个有效的 PE 文件里，Signature 字段被设置为00004550h, ASCII 码字符是“PE00”。标志这 PE 文件头的开始。
+“PE00” 字符串是 PE 文件头的开始，DOS 头部的 e_lfanew 字段正是指向这里。
+
+
