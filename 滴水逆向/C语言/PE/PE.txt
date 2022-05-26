@@ -47,7 +47,27 @@ PE文件的第一个部分是IMAGE_DOS_HEADER，大小为64B，这里面有两�
  3、联合体最多只有一个成员有效
 
 
+1、 Name  8字节  一般情况下以“\0”结尾的ASCII码字符串来表示的名称，内容可以自定义
+ 注意：该名称并不遵守必须以“\0”结尾的规律，如果不以“\0”结尾，系统会截取8字节的长度进行处理
 
+2、Misc 双字  是该节在没有对齐的真实尺寸，该值可以不准确、
+
+3、VirtualAddress 节区在内存中的偏移地址。加上ImageBase才是在内存中的真正地址.
+
+4、SizeOfRawData  节在文件中对齐后的尺寸.
+
+5、PointerToRawData 节区在文件中的偏移.
+
+6、PointerToRelocations 在obj文件中使用 对exe无意义						
+						
+7、PointerToLinenumbers 行号表的位置 调试的时候使用						
+						
+8、NumberOfRelocations 在obj文件中使用  对exe无意义						
+						
+9、NumberOfLinenumbers 行号表中行号的数量 调试的时候使用						
+						
+10、Characteristics 节的属性						
+						
 
 
 
