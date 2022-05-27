@@ -50,7 +50,7 @@ WORD MajorSubsystemVersion;	// 00 04
 WORD MinorSubsystemVersion;	// 00 00
 DWORD Win32VersionValue;		// 00 00 00 00 
 DWORD SizeOflmage;		// 00 06 E0 00    内存中整个PE文件额映射的尺寸，可以比实际的值大SectionAlignment的整数倍
-DWORD SizeOfHeaders;		// 00 00 10 00    所以头+节表按照文件对齐后的大小，否则加载会出错
+DWORD SizeOfHeaders;		// 00 00 10 00    所有头+节表按照文件对齐后的大小，否则加载会出错
 DWORD CheckSum;			// 00 00 00 00    效验和，一些系统文件有要求，用来判断文件是否被修改
 WORD Subsystem;			// 00 02
 WORD DIICharacteristics;		// 00 00 
