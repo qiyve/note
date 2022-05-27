@@ -2,6 +2,16 @@
 #include<stdlib.h>
 #include<Windows.h>
 
+//IMAGE_SIZEOF_FILE_HEADER 20   标准PE大小
+/*
+IMAGE_SECTIONAL_HEADER   节表
+Name 节表名字
+Micsc.VirtualSize 该节文件对齐前真实尺寸   Misc
+ViruakAddress 节拉伸后 开始的地方
+SizeOfRawData 节在文件中对齐后的大小
+PointerToRawDate 节在文件中开始的地方
+Characteristice	节的属性
+*/
 //LPVOID是一个没有类型的指针，也就是说你可以将任意类型的指针赋值给LPVOID类型的变量（一般作为参数传递），
 //然后在使用的时候再转换回来。 可以将其理解为long型的指针，指向void型
 LPVOID ReadPEFile()
@@ -103,7 +113,8 @@ void PrintNTHeaders()
 int main()
 {
 
-	PrintNTHeaders();
+	//PrintNTHeaders();
+	DWORD fileSize = 2;
 
 	return 0;
 }
