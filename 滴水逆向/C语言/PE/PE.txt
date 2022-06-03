@@ -93,6 +93,10 @@ x：硬编码
 	5.在原有数据的最后，新增一个节的数据（内存对齐后的整数倍）
 	6.修正新增节表的属性
 
+3、 在内存中添加新的节表时，需要注意：
+    新增节表中的VirtualAddress（内存中的偏移）必须是最后一个节表中VirtualAddress+max(VirtualSize,SizeOfRawData)
+    (注意： 不一定SizeOfRawData比VirtualSize大)
+    新增节表中的PoinTtoRawData(文件中的偏移)是最后一个节表中的PoinTtoRawData+SizeOfRawData
 
 
 
