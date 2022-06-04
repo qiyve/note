@@ -99,8 +99,20 @@ x：硬编码
     新增节表中的PoinTtoRawData(文件中的偏移)是最后一个节表中的PoinTtoRawData+SizeOfRawData
 
 
+扩大节：
 
+1、拉伸到内存
 
+2、分配一块新的空间：SizeOfImage + Ex
+
+3、将最后一个节的SizeOfRawData和VirtualSize改成 N
+
+  SizeOfRawData = VirtualSize = N
+  N = (SizeOfRawData或者VirtualSize 内存对齐的值） + Ex
+
+4、修改SizeOfImage大小
+
+    SizeOfImage = SizeOfImage + Ex
 
 
 
