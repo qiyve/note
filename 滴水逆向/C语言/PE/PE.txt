@@ -115,7 +115,19 @@ x：硬编码
     SizeOfImage = SizeOfImage + Ex
 
 
+合并节：
 
+1、拉伸到内存
+
+2、将第一个节的内存大小、文件大小改成一样
+
+      MAX = SizeOfRawData > VirtualSize ? SizeOfRawData : VirtualSize
+      SizeOfRawData = VirtuaSize = 
+      最后一个节的VirtualAddress + Max - SizeOfHeaders 内存对齐后的大小
+
+3、将第一个节的属性改为包含所有节的数据
+
+4、修改节的数量为1
 
 
 
