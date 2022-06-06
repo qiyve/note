@@ -1,165 +1,111 @@
-//#define _CRT_SECURE_NO_WARNINGS
-//#include<stdio.h>
-//#include<stdlib.h>
-//#include<Windows.h>
-//
-//
-//DWORD ReadPEFile(IN LPSTR lpszFile, OUT LPVOID* pFileBuffer)
-//{
-//	FILE* pF = NULL;
-//	DWORD FileSize = 0;
-//	LPVOID  pTempBuffer = NULL;
-//
-//	//读取文件
-//	pF = fopen(lpszFile, "rb");
-//	if (!pF)
-//	{
-//		printf("文件读取失败\n");
-//		return 0;
-//	}
-//	fseek(pF, 0, SEEK_END);
-//	FileSize = ftell(pF);
-//	fseek(pF, 0, SEEK_SET);
-//
-//	pTempBuffer = malloc(FileSize);
-//	if (!pTempBuffer)
-//	{
-//		printf("内存空间分配失败\n");
-//		fclose(pF);
-//		return 0;
-//	}
-//
-//	size_t n = fread(pTempBuffer, FileSize,1, pF);
-//	if (!n)
-//	{
-//		printf("读取数据失败\n");
-//		free(pTempBuffer);
-//		fclose(pF);
-//
-//		return 0;
-//	}
-//	//数据读取成功， 关闭文件
-//	*pFileBuffer = pTempBuffer;
-//	pTempBuffer = NULL;
-//	fclose(pF);
-//	return FileSize;
-//}
-//
-////扩大最后一个节表 0x1000
-//DWORD CopyFileBufferToNewImageBuffer(IN LPVOID pFileBuffer, IN size_t fileSize, OUT LPVOID* pNewImageBuffer)
-//{
-//	PIMAGE_DOS_HEADER			pDos = NULL;
-//	PIMAGE_NT_HEADERS			pNT  = NULL;
-//	PIMAGE_FILE_HEADER			pPE  = NULL;
-//	PIMAGE_OPTIONAL_HEADER32	pOP  = NULL;
-//	PIMAGE_SECTION_HEADER		pSect = NULL;
-//	PIMAGE_SECTION_HEADER		endSect = NULL; //记录最后一个节表位置
-//
-//	LPVOID pTmenNewBuffer = NULL;
-//	DWORD FileSize = fileSize;   //记录大小
-//	DWORD size = 0x1000;  //扩展大小
-//
-//	pDos = (PIMAGE_DOS_HEADER)pFileBuffer;
-//	pNT  = (PIMAGE_NT_HEADERS)((DWORD)pDos + pDos->e_lfanew);
-//	pPE	 = (PIMAGE_FILE_HEADER)((DWORD)pNT + 0x4);
-//	pOP = (PIMAGE_OPTIONAL_HEADER32)((DWORD)pPE + IMAGE_SIZEOF_FILE_HEADER);
-//	pSect = (PIMAGE_SECTION_HEADER)((DWORD)pOP + pPE->SizeOfOptionalHeader);
-//	endSect = pSect + pPE->NumberOfSections - 1;   // 最后一个节表位置
-//
-//
-//
-//	//判断是否是有效指针
-//	if (!pFileBuffer)
-//	{
-//		printf("指针无效\n");
-//		return 0;
-//	}
-//
-//	//判断mz标记
-//	if (*(PWORD)pDos != IMAGE_DOS_SIGNATURE)
-//	{
-//		printf("不是有效MZ\n");
-//		return 0;
-//	}
-//	//判断PE
-//	if (*(PWORD)pNT != IMAGE_NT_SIGNATURE)
-//	{
-//		printf("不是有效PE\n");
-//		return 0;
-//	}
-//
-//	FileSize += size; //获取大小
-//	//开辟空间
-//	pTmenNewBuffer = malloc(FileSize);
-//	if (!pTmenNewBuffer)
-//	{
-//		printf("pTmenNewBuffer内存分配失败\n");
-//		pTmenNewBuffer = NULL;
-//		return 0;
-//	}
-//
-//	//扩大最后一个节表
-//	//初始化内存内容
-//	memset(pTmenNewBuffer, 0, FileSize);
-//
-//	//初始化完成之后，先把为修改的内存空间全部拷贝到新的内存空间
-//	memcpy(pTmenNewBuffer, pFileBuffer, fileSize);
-// 
-//	//修改 节表对齐前的大小
-//	endSect->Misc.VirtualSize += size;
-//	// 对齐后大小
-//	endSect->SizeOfRawData += size;
-//
-//	//修改sizeofImage
-//	pOP->SizeOfImage += size;
-//
-//	*pNewImageBuffer = pTmenNewBuffer;
-//	pTmenNewBuffer = NULL;
-//
-//
-//	return pOP->SizeOfImage;
-//}
-//
-//BOOL MemeryTOFile(IN LPVOID pMemBuffer, IN size_t size, OUT LPSTR lpszFile)
-//{
-//	FILE* pF = NULL;
-//	pF = fopen(lpszFile, "wb+");
-//	if (!pF)
-//	{
-//		printf("存盘失败\n");
-//		fclose(pF);
-//		return FALSE;
-//	}
-//
-//	fwrite(pMemBuffer, size, 1, pF);
-//	fclose(pF);
-//	pF = NULL;
-//	return TRUE;
-//}
-//
-//
-//int main()
-//{
-//	char file_IN[] = "D:/ipmsg.exe";
-//	char file_OUT[] = "ipmsg_s.exe";
-//
-//	LPVOID pFileBuffer = NULL;
-//	LPVOID pImageBuffer = NULL;
-//
-//	DWORD size1 = 0;
-//	DWORD size2 = 0;
-//	DWORD isOK = 0;
-//
-//
-//
-//	size1 = ReadPEFile(file_IN, &pFileBuffer);
-//	size2 = CopyFileBufferToNewImageBuffer(pFileBuffer, size1, &pImageBuffer);
-//	isOK = MemeryTOFile(pImageBuffer, size2, file_OUT);
-//	if (isOK)
-//	{
-//		printf("存盘成功\n");
-//	}
-//
-//
-//	return 0;
-//}
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<Windows.h>
+#include<malloc.h>
+
+char file_path[] = "ipmsg.exe";
+char save_path[] = "ipmsg_s.exe";
+
+//最后一个节扩大0x1000
+DWORD Fileread(char** Filebuffer) 
+{
+	FILE* fp = NULL;
+	char* filebuffer = NULL;
+	int file_size = 0;
+
+	fp = fopen(file_path, "rb");
+	if (!fp)
+	{
+		printf("文件读取失败\n");
+		return 0;
+	}
+	//获取大小
+	fseek(fp, 0, SEEK_END);
+	file_size = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+
+	filebuffer = (char*)malloc(file_size + 0x1000);
+	if (!filebuffer)
+	{
+		printf("内存分配失败\n");
+	}
+
+	size_t n = fread(filebuffer, file_size, 1, fp);
+	if (!n)
+	{
+		printf("读取数据失败!\r\n");
+		free(filebuffer);   // 释放内存空间
+		fclose(fp);      // 关闭文件流
+		return 0;
+	}
+
+	fclose(fp);
+	*Filebuffer = filebuffer;
+	return file_size + 0x1000;
+}
+
+DWORD ExPand_Section(int x, char* filebuffer)
+{
+	PIMAGE_DOS_HEADER			pDosHeader	   = NULL;
+	PIMAGE_NT_HEADERS			pNTHeader	   = NULL;
+	PIMAGE_FILE_HEADER			pPEHeader	   = NULL;
+	PIMAGE_OPTIONAL_HEADER32	pOptionHeader  = NULL;
+	PIMAGE_SECTION_HEADER		pSectionHeader = NULL;
+
+	pDosHeader = (PIMAGE_DOS_HEADER)filebuffer;
+	//判断是否是有效指针
+	if (!filebuffer)
+	{
+		printf("指针无效\n");
+		return 0;
+	}
+
+	//判断mz标记
+	if (*(PWORD)pDosHeader != IMAGE_DOS_SIGNATURE)
+	{
+		printf("不是有效MZ\n");
+		return 0;
+	}
+
+	if (*((PDWORD)((DWORD)filebuffer + pDosHeader->e_lfanew)) != IMAGE_NT_SIGNATURE)
+	{
+		printf("不是有效的PE文件\n");
+		return 0;
+	}
+
+	pNTHeader		= (PIMAGE_NT_HEADERS)((DWORD)filebuffer + pDosHeader->e_lfanew);
+	pPEHeader		= (PIMAGE_FILE_HEADER)((DWORD)pNTHeader + 4);
+	pOptionHeader	= (PIMAGE_OPTIONAL_HEADER32)((DWORD)pPEHeader + IMAGE_SIZEOF_FILE_HEADER);
+	pSectionHeader  = (PIMAGE_SECTION_HEADER)((DWORD)pOptionHeader + pPEHeader->SizeOfOptionalHeader);
+
+	//获取最后一个节表位置 
+	PIMAGE_SECTION_HEADER endsectionheader = pSectionHeader + pPEHeader->NumberOfSections - 1;
+
+	//修改 对齐前、后大小 为 + 0x1000
+	endsectionheader->Misc.VirtualSize += 0x1000;
+	endsectionheader->SizeOfRawData += 0x1000;
+	pOptionHeader->SizeOfImage += 0x1000;
+
+	//存盘
+	FILE* fp = NULL;
+	fp = fopen(save_path, "wb");
+	fwrite(filebuffer, 1, x, fp);
+	fclose(fp);
+
+	return 0;
+}
+DWORD test() 
+{
+
+	char* filebuffer = NULL;
+	int x = Fileread(&filebuffer);
+
+	ExPand_Section(x, filebuffer);
+	return 0;
+}
+int main() 
+{
+	test();
+
+	return 0;
+}
