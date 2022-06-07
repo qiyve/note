@@ -149,15 +149,89 @@ RVA与FOA相互转换：
 4、修改节的数量为1
 
 
+使用静态链接库：
+
+   方式一：
+	将xxx.h 和 xxx.lib 复制到要使用的项目中
+	在需要使用的文件中包含: #include "xxx.h"
+	在需要使用的文件中包含: #pragma comment (lib,  "xxx.lib")
+
+   方式二: 
+	将xxx.h 和 xxx.lib 复制到要使用的项目中
+	在需要使用的文件中包含：#include "xxx.h"  并在 Link中添加 xxx.lib；
+
+静态链接库的缺点：
+
+	使用静态生成的可执行文件体积较大，造成浪费
+	常用的printf 、memcpy、strcpy等就来自这种静态库
 
 
+动态链接库：
 
+  一、 创建DLL
 
+	1、源文件中： int __stdcall  Plus( int x, int y)     // __stdcall 内屏栈
+		      {  return x+ y; }	
 
+	2、头文件中：extern "C" _declspec (dllexport) __stdcall  int  Plus ( int  x, int y);
 
+注释：
 
+1、extern 表示这是个全局函数，可以供各个其他的函数条用；
 
+2、“C“按照C语言的方式进行编译、链接
 
+__declspec (dllexport)告诉编译器此函数为导出函数
+
+ 
+  二、使用DLL
+
+     方式一：隐士连接
+
+     步骤1：将 *.dll  *.lib 放到工程目录下面
+     步骤2：将 #pragma comment (lib , "DLL名 . lib")添加到调用文件中
+     步骤3：加入函数的声明
+
+说明：
+     __declspec(dllimort)告诉编译器此函数为导入函数：
+
+   
+    方式二：显示连接
+
+      步骤1： //第一函数指针
+
+	typedef  int (__stdcall *lpPlus)(int,  int);
+
+      步骤2：//声明函数指针变量
+
+	lpPlus  myPlus ; 
+
+      步骤3： //动态加载dll到内存中
+
+	HINSTANCE    hModule = LoadLibrary ("DllDemo.dll ");
+
+      步骤4： //获取函数地址
+
+	myPlus = (lpPlus)GetProcAddress (hModule, "_Plus@8");
+
+      步骤5： //调用函数
+
+	int  a = myPlus(10, 2);
+
+说明：
+
+Handle 是代表系统的内核对象，如文件句柄，线程句柄，进程句柄
+
+HMODULE 是代表应用程序载入的模块
+
+HINSTANCE  在win32下与 HMODULE 是相同的东西 Win16 遗留
+
+HWND 是窗口句柄
+
+起始就是一个无符号整型，Windows之所以这样设计有2个目的：
+
+1、可读性更好
+2、避免在无意中进行运算
 
 
 
