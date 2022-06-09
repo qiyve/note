@@ -86,3 +86,65 @@ _IMAGE_ DATA_ DIRECTORY DataDirectory[16];
 				
 
 
+5、导出表
+typedef struct _IMAGE_EXPORT_DIRECTORY {							
+    DWORD   Characteristics;				// 未使用			
+    DWORD   TimeDateStamp;				// 时间戳			
+    WORD    MajorVersion;				// 未使用			
+    WORD    MinorVersion;				// 未使用			
+    DWORD   Name;				// 指向该导出表文件名字符串			
+    DWORD   Base;				// 导出函数起始序号			
+    DWORD   NumberOfFunctions;		// 所有导出函数的个数			
+    DWORD   NumberOfNames;		// 以函数名字导出的函数个数			
+    DWORD   AddressOfFunctions;    		 // 导出函数地址表RVA							
+    DWORD   AddressOfNames;        		 // 导出函数名称表RVA							
+    DWORD   AddressOfNameOrdinals;  		 // 导出函数序号表RVA							
+} IMAGE_EXPORT_DIRECTORY, *PIMAGE_EXPORT_DIRECTORY;							
+							
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
