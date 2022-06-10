@@ -93,7 +93,13 @@ RVA与FOA相互转换：
 4、上一步的得到的该节的相对地址+该节在内存中的偏移(VirtualAddress），即得到RVA
 
 
-
+<1> 得到RVA的值，RVA=内存地址-ImageBase（ImageBase是IMAGE_OPTION_HEADER中的成员）；
+<2> 比较RVA与SizeofHeaders的大小，判断RVA是否位于PE头中，如果是的话，FOA=RVA，（SizeofHeaders是IMAGE_OPTION_HEADER中的成员）；
+<3> 判断RVA位于哪个节，
+　　	RVA >= 节.VirtualAddress
+　　	RVA <= 节.VirtualAddress + 当前节内存对齐后的大小
+　　	差值 = RVA - 节.VirtualAddress
+<4> FOA = 节.PointerToRawData + 差值
 
 
 新增节
@@ -232,6 +238,7 @@ HWND 是窗口句柄
 
 1、可读性更好
 2、避免在无意中进行运算
+
 
 
 
