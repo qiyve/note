@@ -87,6 +87,15 @@ _IMAGE_ DATA_ DIRECTORY DataDirectory[16];
 
 
 5、导出表
+								
+数据目录项的第一个结构，就是导出表.										
+typedef struct _IMAGE_DATA_DIRECTORY {					
+    DWORD   VirtualAddress;					
+    DWORD   Size;					
+} IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;					
+	
+	RVA转FOA				
+
 typedef struct _IMAGE_EXPORT_DIRECTORY {							
     DWORD   Characteristics;				// 未使用			
     DWORD   TimeDateStamp;				// 时间戳			
@@ -100,11 +109,25 @@ typedef struct _IMAGE_EXPORT_DIRECTORY {
     DWORD   AddressOfNames;        		 // 导出函数名称表RVA							
     DWORD   AddressOfNameOrdinals;  		 // 导出函数序号表RVA							
 } IMAGE_EXPORT_DIRECTORY, *PIMAGE_EXPORT_DIRECTORY;							
-							
+						
 
 
-
-
+6、重定位表的定位：					
+										
+数据目录项的第6个结构，就是重定位表.					
+					
+typedef struct _IMAGE_DATA_DIRECTORY {					
+    DWORD   VirtualAddress;	                       //RVA				
+    DWORD   Size;					
+} IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;					
+					
+	RVA转FOA				
+			
+typedef struct _IMAGE_BASE_RELOCATION {						
+    DWORD   VirtualAddress;		           //偏移				
+    DWORD   SizeOfBlock;	                           //表块大小					
+} IMAGE_BASE_RELOCATION;						
+typedef IMAGE_BASE_RELOCATION ，* PIMAGE_BASE_RELOCATION;						
 
 
 
