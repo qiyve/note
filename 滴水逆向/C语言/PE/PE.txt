@@ -287,10 +287,30 @@ HWND 是窗口句柄
       具体项的数量 = （SizeOFBlock - 8）/ 2
      
 
+移动导出表的步骤
 
+	第一步：在DLL中新增一个节，并返回新增后的FOA
 
+	第二步：复制 AddressOfFunctions
+	             长度：4 * NumberOfFunctions
 
+	第三步：复制AdderssOfNameOrdinals
+	             长度：NumberOfNamOrdinals * 2
 
+	第四步：复制AddressOfName
+	             长度：NumberOfNames * 4 
+
+	第五步：复制所有的函数名
+	              长度不确定，复制时直接修复AddressOfNames
+
+	第六步：复制 IMAGE_EXPORT_DIRECTOY 结构
+		
+	第七步：修复IMAGE_EXPORT_DIRECTOY 结构中的 
+		AddressOfFunctions		
+		AddressOfNameOrdinals		
+		AddressOfNames		
+
+	第八步：修复目录项中的值，指向新的IMAGE_EXPORT_DIRECTORY
 
 
 
