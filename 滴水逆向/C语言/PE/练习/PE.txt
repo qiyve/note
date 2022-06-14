@@ -130,6 +130,19 @@ typedef struct _IMAGE_BASE_RELOCATION {
 typedef IMAGE_BASE_RELOCATION ，* PIMAGE_BASE_RELOCATION;						
 
 
+7、导入表结构：
+数据目录项的第2个结构，就是导入表结构.																																		
+typedef struct _IMAGE_IMPORT_DESCRIPTOR {									
+    union {									
+        DWORD   Characteristics;           									
+        DWORD   OriginalFirstThunk;         						//RVA 指向IMAGE_THUNK_DATA结构数组			
+    };									
+    DWORD   TimeDateStamp;               						//时间戳			
+    DWORD   ForwarderChain;              									
+    DWORD   Name;						//RVA,指向dll名字，该名字已0结尾			
+    DWORD   FirstThunk;                 						//RVA,指向IMAGE_THUNK_DATA结构数组			
+} IMAGE_IMPORT_DESCRIPTOR;									
+typedef IMAGE_IMPORT_DESCRIPTOR UNALIGNED *PIMAGE_IMPORT_DESCRIPTOR;									
 
 
 
