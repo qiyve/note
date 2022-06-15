@@ -314,9 +314,34 @@ HWND 是窗口句柄
 
 
 
+输出导出表过程：
 
+  1、定义导出表：
 
+        sizeof(IMAGE_IMPORT_DESCRIPTOR) 个 0 代表导入表结束
 
+  2、输出DLL名字
+
+          IMAGE_IMPORT_DESCRIPTOR  中Name   -->RVA 指向一个以0结尾的字符串
+   
+  3、遍历OriginalFirstThunk
+
+           判断最高位是否是1 如果是 那么出去最高位的值就是函数的导出序号
+
+           如果不是，那么这个值是一个RVA 指向 IMAGE_BY_NAME  结构数组 以0结尾	宽度4字节	
+            GetProcAddr(,函数的名字或者导出序号);			
+
+一、流程
+1、File-> FileBuffer
+2、定位导入表
+3、循环导入表
+4、获取导入表名字
+5、获取INT表RVA
+6、获取INT表的地址和序号
+7、循环打印INT表的内容
+8、获取IAT表RVA
+9、获取IAT表的地址和序号
+10、循环打印IAT表的内容
 
 
 
