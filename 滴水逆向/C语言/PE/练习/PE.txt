@@ -130,20 +130,50 @@ typedef struct _IMAGE_BASE_RELOCATION {
 typedef IMAGE_BASE_RELOCATION ，* PIMAGE_BASE_RELOCATION;						
 
 
+
 7、导入表结构：
-数据目录项的第2个结构，就是导入表结构.																																		
+
+typedef struct _IMAGE_DATA_DIRECTORY {							
+    DWORD   VirtualAddress;			//RVA 指向导入表结构		
+    DWORD   Size;							
+} IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;							
+							
+							
+	将RVA转换成FOA						
+																																	
 typedef struct _IMAGE_IMPORT_DESCRIPTOR {									
     union {									
         DWORD   Characteristics;           									
-        DWORD   OriginalFirstThunk;         						//RVA 指向IMAGE_THUNK_DATA结构数组			
+        DWORD   OriginalFirstThunk;         		//RVA 指向IMAGE_THUNK_DATA结构数组			
     };									
-    DWORD   TimeDateStamp;               						//时间戳			
+    DWORD   TimeDateStamp;               		//时间戳			
     DWORD   ForwarderChain;              									
-    DWORD   Name;						//RVA,指向dll名字，该名字已0结尾			
-    DWORD   FirstThunk;                 						//RVA,指向IMAGE_THUNK_DATA结构数组			
+    DWORD   Name;				//RVA,指向dll名字，该名字已0结尾			
+    DWORD   FirstThunk;                 		//RVA,指向IMAGE_THUNK_DATA结构数组			
 } IMAGE_IMPORT_DESCRIPTOR;									
 typedef IMAGE_IMPORT_DESCRIPTOR UNALIGNED *PIMAGE_IMPORT_DESCRIPTOR;									
 
+
+typedef struct _IMAGE_THUNK_DATA32 {												
+    union {												
+        PBYTE  ForwarderString;												
+        PDWORD Function;												
+        DWORD Ordinal;			//序号						
+        PIMAGE_IMPORT_BY_NAME  AddressOfData;		//指向IMAGE_IMPORT_BY_NAME						
+    } u1;												
+} IMAGE_THUNK_DATA32;												
+typedef IMAGE_THUNK_DATA32 * PIMAGE_THUNK_DATA32;												
+												
+												
+typedef struct _IMAGE_IMPORT_BY_NAME {												
+    WORD    Hint;				//可能为空，编译器决定 如果不为空 是函数在导出表中的索引						
+    BYTE    Name[1];				//函数名称，以0结尾						
+} IMAGE_IMPORT_BY_NAME, *PIMAGE_IMPORT_BY_NAME;												
+												
+
+				
+					
+			
 
 
 
