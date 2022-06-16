@@ -171,9 +171,28 @@ typedef struct _IMAGE_IMPORT_BY_NAME {
 } IMAGE_IMPORT_BY_NAME, *PIMAGE_IMPORT_BY_NAME;												
 												
 
-				
+
+8、绑定导入表
+
+绑定导入表位于数据目录的第12项
+typedef struct _IMAGE_BOUND_IMPORT_DESCRIPTOR 
+{
+    DWORD   TimeDateStamp;      		//表示绑定的时间戳，如果和PE头中的TimeDateStamp不同则可能被修改过
+    WORD    OffsetModuleName;   		//dll名称地址
+    WORD    NumberOfModuleForwarderRefs;    	//依赖dll个数
+// Array of zero or more IMAGE_BOUND_FORWARDER_REF follows
+} IMAGE_BOUND_IMPORT_DESCRIPTOR,  *PIMAGE_BOUND_IMPORT_DESCRIPTOR;
+
+     NumberOfModuleForwarderRefs是指该dll自身依赖的dll的个数。值为n代表该结构后面紧跟了n个
+    IMAGE_BOUND_FORWARDER_REF结构。之后才是导入表导入的下一个dll的结构。而IMAGE_BOUND_FORWARDER_REF			
 					
-			
+typedef struct _IMAGE_BOUND_FORWARDER_REF
+ {
+    DWORD   TimeDateStamp;  		//时间戳，同样的作用检查更新情况
+    WORD    OffsetModuleName;   		//dll名称地址
+    WORD    Reserved;   //保留
+} IMAGE_BOUND_FORWARDER_REF, *PIMAGE_BOUND_FORWARDER_REF;
+		
 
 
 
