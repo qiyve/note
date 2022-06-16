@@ -332,23 +332,36 @@ HWND 是窗口句柄
             GetProcAddr(,函数的名字或者导出序号);			
 
 一、流程
-1、File-> FileBuffer
-2、定位导入表
-3、循环导入表
-4、获取导入表名字
-5、获取INT表RVA
-6、获取INT表的地址和序号
-7、循环打印INT表的内容
-8、获取IAT表RVA
-9、获取IAT表的地址和序号
-10、循环打印IAT表的内容
+	1、File-> FileBuffer
+	2、定位导入表
+	3、循环导入表
+	4、获取导入表名字
+	5、获取INT表RVA
+	6、获取INT表的地址和序号
+	7、循环打印INT表的内容
+	8、获取IAT表RVA
+	9、获取IAT表的地址和序号
+	10、循环打印IAT表的内容
+
+
+绑定导入表结构：
+
+  PE加载EXE相关的DLL时，首先会根据IMAGE_IMPORT_DESCRIPTOR结构中的TimeDateStamp
+来判断是否要重新计算IAT表中的地址
+
+  TimeDateStamp == 0 未绑定
+  TimeDateStamp == -1 已绑定，真正的绑定时间为IMAGE_BOUND_IMPORT_DESCRIPTOR 的 TimeDateStamp
+
+//  注 ： 当IMAGE_BOUND_IMPORT_DESCRIPTOR 结构体中的 TimeDateStamp与DLL文件标准PE头中的TimeDateStamp
+             值不符时，或者DLL需要重新定位的时候，就会重新计算IAT中的值
 
 
 
+获取名称字符串思路：
 
-
-
-
+OffsetModuleName 不是 RVA 也不是 FOA，是使用第一个绑定导入表的RVA（即第一个_IMAGE_BOUND_IMPORT_DESCRIPTOR的RVA），
+加上OffsetModuleName 的值。得到的才是名字字符串真正的 RVA。那么其他的绑定导入表结构和 所有_IMAGE_BOUND_FORWARDER_REF 结构都一样，
+计算方法都是用当前OffsetModuleName 的值 加上 第一个绑定导入表的 RVA，注意全都是加第一个，不加别的。 
 
 
 
