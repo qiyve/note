@@ -363,7 +363,7 @@ OffsetModuleName 不是 RVA 也不是 FOA，是使用第一个绑定导入表的
 加上OffsetModuleName 的值。得到的才是名字字符串真正的 RVA。那么其他的绑定导入表结构和 所有_IMAGE_BOUND_FORWARDER_REF 结构都一样，
 计算方法都是用当前OffsetModuleName 的值 加上 第一个绑定导入表的 RVA，注意全都是加第一个，不加别的。 
 
-
+dll的名字计算公式为：第一个DESCRIPTOR的值+OffsetModuleName；     
 
 
 
