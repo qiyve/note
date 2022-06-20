@@ -192,7 +192,7 @@ __declspec (dllexport)告诉编译器此函数为导出函数
  
   二、使用DLL
 
-     方式一：隐士连接
+     方式一：隐式连接
 
      步骤1：将 *.dll  *.lib 放到工程目录下面
      步骤2：将 #pragma comment (lib , "DLL名 . lib")添加到调用文件中
