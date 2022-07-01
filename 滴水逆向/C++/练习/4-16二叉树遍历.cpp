@@ -49,7 +49,7 @@ public:
 	int GetDepth(TreeNode<T>* pNode);					//返回某个节点的高度/深度			
 private:
 	void Init();   //初始化怪物信息
-	void Destory(TreeNode<T>* pNode);  //用于释放堆区
+	void Clear(TreeNode<T>* pNode);  //用于释放堆区
 private:
 	TreeNode<T>* m_pRoot;		//根结点指针			
 	int size;					//树中元素总个数			
@@ -87,16 +87,18 @@ template<class T>
 BSortTree<T>::~BSortTree() {
 
 	//释放所以节点空间								
-
+	Clear(m_pRoot);
 }
 template<class T>
-void BSortTree<T>::Destory(TreeNode<T>* pNode)
+void BSortTree<T>::Clear(TreeNode<T>* pNode)
 {
 	if (pNode == NULL)
 	{
 		return;
 	}
+	//先删除左子树
 	Destory(pNode->pLeft);
+	//在删除右子树
 	Destory(pNode->pRight);
 	delete pNode;
 	pNode = NULL:
