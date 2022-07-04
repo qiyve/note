@@ -1,0 +1,120 @@
+win32 API ：即存放在C：\Windows\system32 下面所有的DLL
+
+非常重要的几个DLL：
+	
+	Kernel32.dll : 最核心的功能模块，比如管理内存、进程和线程相关的函数等、
+	User32.dll ：是windows用户界面相关应用程序接口，如创建窗口和发送信息等
+	GDI32.dll：全称Graphical Device Interface（图形设备接口),包含用于画图和显示文本的函数，比如要显示一个
+		程序窗口，就调用了其中的函数来画这个窗口
+
+Win32 宽字符和多字节字符
+
+(1) 包含头文件 #include <locale.h>										
+(2) setlocale(LC_ALL,""); //使用控制台默认的编码					
+
+	1.字符类型                          2.字符串指针
+	char      	      CHAR	          PSTR（LPSTR）指向多字节字符串
+
+	wchar_t	      WCHAR        PWSTR(LPWSTR) 指向宽字符串     例：wchar_t x1[] = L"中国"  L：查询UNICODE
+	
+	  宏  TCHA       宏   PTSTR（LPTSTR) 例：TCHAR cht[] = TEXT("中国"); TEXT：根据环境会自己转换
+    
+C语言中的宽字符和多字符													
+							
+	char		wchar_t		//多字节字符类型   宽字符类型										
+	printf		wprintf		//打印到控制台函数										
+	strlen		wcslen		//获取长度										
+	strcpy		wcscpy		//字符串复制										
+	strcat		wcscat		//字符串拼接										
+	strcmp		wcscmp		//字符串比较										
+	strstr		wcsstr		//字符串查找	
+
+打印
+	Win32程序不像普通的控制台程序，他的打印信息不会出现dos窗口，可以使用OutputDebugStringF函数出现在
+	输入窗口。对OtputDebugStringF做些改动，就可以使打印信息再debug版中调用，而不是出现再正式的release版本中
+
+头文件中：
+void __cdecl OutputDebugStringF(const char *format, ...);
+#ifdef _DEBUG  
+#define DbgPrintf   OutputDebugStringF  
+#else  
+#define DbgPrintf  
+#endif
+
+源文件中：
+void __cdecl OutputDebugStringF(const char *format, ...)
+{
+va_list vlArgs;
+char    *strBuffer = (char*)GlobalAlloc(GPTR, 4096);
+
+    va_start(vlArgs, format);
+_vsnprintf(strBuffer, 4096 - 1, format, vlArgs);
+va_end(vlArgs);
+strcat(strBuffer, "\n");
+OutputDebugStringA(strBuffer);
+GlobalFree(strBuffer);
+return;
+}		
+
+错误处理
+
+DWORD GetLastError（VOID）
+GetLastError返回的值通过再API函数中调用SetLastError或SetLastErrorEx设置。函数并无必要设置上一次错误信息，
+所以即使一次GetLastError调用返回值为零，也不能担保函数已成功执行。只有在函数调用返回一个错误结果时，这个
+函数指出的错误结构才是有效的。通常只有在函数返回一个错误结果，而且已知函数会设置GetLastError变量的前提下，
+才应该访问GetLastError；这时能保证获得有效的结果
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
