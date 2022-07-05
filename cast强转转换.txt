@@ -59,11 +59,16 @@ interpret是解释的意思，reinterpret即为重新解释。
 该运算符把expression重新解释成type-id类型的对象。对象在这里的范围包括变量以及实现类的对象、
 此标识符的意思是即为数据的二进制形式重新解释，但是不改变其值
 
-nt i; 
-char ch='A';
-i=reinterpret_cast<int>(ch);
+#include <iostream>
 
-i = 65 貌似根C语言的强制转换有点类似
+int main()
+{
+	float a = 4624.7613f;
+	int b = *reinterpret_cast<int*>(&a);
+	printf("%zx\n", b);
+}
+
+貌似根C语言的强制转换有点类似
 
 其实不然，C语言的会将一些数值之类的截断等处理，比如浮点转整形，浮点型根整形的保存数据处理方式不同，但经过处理
 之后就会变成了截断的数值，而此时如果用reinterpret_cast来转换，他会将那二进制的值重新当作另外一种数据类型来解释的
