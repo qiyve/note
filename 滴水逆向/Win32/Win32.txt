@@ -65,10 +65,67 @@ GetLastError返回的值通过再API函数中调用SetLastError或SetLastErrorEx
 才应该访问GetLastError；这时能保证获得有效的结果
 
 
+时间、消息、消息处理函数
+
+typedef struct tagMSG {			
+  HWND   hwnd; 			
+  UINT   message; 			
+  WPARAM wParam; 			
+  LPARAM lParam; 			
+  DWORD  time; 			
+  POINT  pt; 			
+} MSG, *PMSG; 			
+
+1、hwnd
+表示消息所属的窗口
+
+一个消息一般都是与某个窗口相关联的
+Windows中 HWND类型的变量通常用来表示窗口
+
+2、message
+
+在Windows中，消息是一个数值来表示的
+但是由于数值不便于记忆，所以Windows将消息对应的数值定义为 WM_XXX宏（WM == Windows Message）
+鼠标左键按下 WM_LBUTTONDOWN   键盘按下 WM_KEYDOWN
+
+3、wParam 和 lParam
+
+32位消息的特定附加信息，具体表示什么处决于message
+
+4、time
+
+消息创建时的时间
+
+5、pt
+消息创建时的鼠标位置
 
 
+一个完整的消息流程
 
+	1、系统/用户触发的某个动作			//事件
 
+	2、系统将这些信息存储到MSG结构体 		//消息
+
+	3、系统将该信息存储到相关应用程序的消息队列中	//消息队列
+
+	4、  MSG Msg；							
+	while(GetMessage(&Msg,NULL,0,0))        		//从队列中获取消息	
+	{		
+		TranslateMessage(&Msg);                  		//翻译消息  	
+		DispatchMessage(&Msg);			//分派消息    	
+	}
+
+	5、DispatchMessage将加工过的信息传递 给操作系统
+
+	6、系统调用窗口过程函数
+
+	7、LRESULT CALLBACK WindowProc(  		//窗口过程函数	
+		IN  HWND hwnd,  			//窗口句柄				
+		IN  UINT uMsg,  			//消息类型			
+		IN  WPARAM wParam,  						
+		IN  LPARAM lParam  						
+	  );  						
+							
 
 
 
