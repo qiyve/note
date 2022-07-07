@@ -1,5 +1,14 @@
-﻿#include<stdio.h>
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
 #include<Windows.h>
+
+//头文件中：
+void __cdecl OutputDebugStringF(const char* format, ...);
+#ifdef _DEBUG  
+#define DbgPrintf   OutputDebugStringF  
+#else  
+#define DbgPrintf  
+#endif
 
 /*
 步骤1：创建Windows应用程序  选择空项目
@@ -87,12 +96,86 @@ LRESULT CALLBACK WindowProc(
 	IN LPARAM lParam
 )
 {   
+	
+
 	switch (uMsg)
 	{
+		//窗口消息						
+	case WM_CREATE:
+	{
+		DbgPrintf("WM_CREATE %d %d\n", wParam, lParam);
+		CREATESTRUCT* createst = (CREATESTRUCT*)lParam;
+		DbgPrintf("CREATESTRUCT %s\n", createst->lpszClass);
+
+		return 0;
+	}
+	case WM_MOVE: //坐标
+	{
+		DbgPrintf("WM_MOVE %d %d\n", wParam, lParam);
+		POINTS points = MAKEPOINTS(lParam); //MAKEPOINTS宏将包含点的 x 和 y 坐标的值转换为POINTS结构
+		DbgPrintf("X Y %d %d\n", points.x, points.y);
+
+		return 0;
+	}
+	case WM_SIZE:	//在窗口大小更改后发送到窗口
+	{
+		DbgPrintf("WM_SIZE %d %d\n", wParam, lParam); //wParam请求的调整大小的类型
+		int newWidth = (int)(short)LOWORD(lParam); //lParam 的低阶字指定了工作台的新宽度
+		int newHeight = (int)(short)HIWORD(lParam);//lParam 的高阶词指定了客户区域的新高度
+		DbgPrintf("WM_SIZE %d %d\n", newWidth, newHeight);
+
+		return 0;
+	}
 	case WM_DESTROY:
-	//函数功能描述:PostQuitMessage函数通知系统当前有一个线程发送了进程中止退出请求.它典型的使用在WM_DESTROY消息处理中
+	{
+		DbgPrintf("WM_DESTROY %d %d\n", wParam, lParam);
+		//函数功能描述:PostQuitMessage函数通知系统当前有一个线程发送了进程中止退出请求.它典型的使用在WM_DESTROY消息处理中
 		PostQuitMessage(0);
+
+		return 0;
+	}
+	//键盘消息						
+	case WM_KEYUP:
+	{
+		DbgPrintf("WM_KEYUP %d %d\n", wParam, lParam);
+
+		return 0;
+	}
+	case WM_KEYDOWN:
+	{
+		DbgPrintf("WM_KEYDOWN %d %d\n", wParam, lParam);
+
+		return 0;
+	}
+	//鼠标消息						
+	case WM_LBUTTONDOWN:
+	{
+		DbgPrintf("WM_LBUTTONDOWN %d %d\n", wParam, lParam);
+		POINTS points = MAKEPOINTS(lParam);
+		DbgPrintf("WM_LBUTTONDOWN %d %d\n", points.x, points.y);
+
+		return 0;
+	}
 	}
 	//默认的窗口处理函数 我们可以把不关心的消息都丢给它来处理
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
+
 }
+
+
+//源文件中：
+void __cdecl OutputDebugStringF(const char* format, ...)
+{
+	va_list vlArgs;
+	char* strBuffer = (char*)GlobalAlloc(GPTR, 4096);
+
+	va_start(vlArgs, format);
+	_vsnprintf(strBuffer, 4096 - 1, format, vlArgs);
+	va_end(vlArgs);
+	strcat(strBuffer, "\n");
+	OutputDebugStringA(strBuffer);
+	GlobalFree(strBuffer);
+	return;
+}
+
+
