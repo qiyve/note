@@ -125,7 +125,31 @@ Windows中 HWND类型的变量通常用来表示窗口
 		IN  WPARAM wParam,  						
 		IN  LPARAM lParam  						
 	  );  						
-							
+--------------------------------------------------------------------------------------------------------------------------------							
+
+1、Win32应用程序入口识别
+
+[<&KERNEL32.GetModuleHandleA ]其实就是得到WinMain中的第一个参数句柄，也就是WinMain中由stdcall被压栈的第四
+参数，压栈实例句柄的下一个call，应该就是我们的WinMain函数入口，我们在跟进去看看就能确定是不是我们真正WinMan函数入口
+
+2、ESP寻址的特点
+
+进入WinMain函数，开展操作并不是常见的EBP寻址(push ebp, move ebp, esp) ，而是sub esp，44这种
+debug大多采用EBP+偏移开栈，release大多采用ESP - 偏移开栈
+ESP开栈，每次push压栈，pop出栈都会引起esp的变化，需要重点注意
+
+3、窗口回调函数的定位
+
+    窗口回调函数在WinMain函数中出现就是在函数开头构造wndclass类中，wndclass中的第二个参数就是窗口回调函
+数的指针	
+    而wndclass类可以通过RegisterClass函数得到，RegisterClass的唯一参数就是wndclass类的指针
+    得到wndclass类的指针，由此可得回调函数的地址
+
+4、具体时间的处理的定位
+
+    打个条件断点，因为接受所有的事件，不做条件断点，会涌来很多相应
+    再去查看Windows定义的时间编号
+
 
 
 
