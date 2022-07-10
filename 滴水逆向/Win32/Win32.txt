@@ -159,12 +159,77 @@ ESP开栈，每次push压栈，pop出栈都会引起esp的变化，需要重点�
                   单机按钮                                        转换WM_COMMAND      
   按钮————————> 系统提供WinProc  ———————————> 父窗口的WinProc
 
+-------------------------------------------------------------------------------------------------------------------------------
+
+资源表
+
+typedef struct _IMAGE_RESOURCE_DIRECTORY {								
+    DWORD   Characteristics;				//资源属性  保留 0		
+    DWORD   TimeDateStamp;				//资源创建的时间		
+    WORD    MajorVersion;				//资源版本号 未使用 0		
+    WORD    MinorVersion;				//资源版本号 未使用 0		
+    WORD    NumberOfNamedEntries;			//以名称命名的资源数量		
+    WORD    NumberOfIdEntries;			//以ID命名的资源数量		
+//  IMAGE_RESOURCE_DIRECTORY_ENTRY DirectoryEntries[];								
+} IMAGE_RESOURCE_DIRECTORY, *PIMAGE_RESOURCE_DIRECTORY;								
+
+数据目录项
+
+typedef struct _IMAGE_RESOURCE_DIRECTORY_ENTRY {									
+    union {					//目录项的名称、或者ID			
+        struct {									
+            DWORD NameOffset:31;										
+            DWORD NameIsString:1;	//用于判断存储值的 低31 是名称或者ID								
+        };									
+        DWORD   Name;									
+        WORD    Id;									
+    };									
+    union {									
+        DWORD   OffsetToData;			//目录项指针			
+        struct {									
+            DWORD   OffsetToDirectory:31;									
+            DWORD   DataIsDirectory:1;									
+        };									
+    };									
+} IMAGE_RESOURCE_DIRECTORY_ENTRY, *PIMAGE_RESOURCE_DIRECTORY_ENTRY;									
+
+数据项
+
+typedef struct _IMAGE_DATA_DIRECTORY {					
+    DWORD   VirtualAddress;					
+    DWORD   Size;					
+} IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;					
 
 
+IMAGE_RESOURCE_DIRECTOry_ENTRY
 
+Name的含义：资源类型         第一层    	   第二层		第三层：
+	     	             光标：1	   资源编号	代码页
+		             位图：2
+		             图标：3
+		             菜单：4
+		             对话框：5  
+		             共16种预定义类型....
 
+特别说明：
+1、当最高位是1时，低31位时一个UNICODE指针，指向一个结构体：
+typedef struct _IMAGE_RESOURCE_DIR_STRING_U {						
+    WORD    Length;		//长度				
+    WCHAR   NameString[ 1 ];	//字符串首地址				
+} IMAGE_RESOURCE_DIR_STRING_U, *PIMAGE_RESOURCE_DIR_STRING_U;
 
+2、当最高位是0时，表示字段的值作为 ID使用
+3、如何判断第一位的值？
+pResourceEntry[i].Name & 0x80000000 == 0x80000000	
+pResourceEntry[i].NameIsString == 1					
 
+OffsetToData的含义
+
+最高位如果为1，低31位 + 资源地址 == 下一层目录节点的起始位置
+第一层、第二层全为1
+最高位如果为0，指向 IMAGE_RESOURCE_DATA_ENTRY
+第三次为0
+			
 
 
 
