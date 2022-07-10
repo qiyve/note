@@ -161,6 +161,22 @@ ESP开栈，每次push压栈，pop出栈都会引起esp的变化，需要重点�
 
 -------------------------------------------------------------------------------------------------------------------------------
 
+资源文件、创建对话框
+1、创建一个空的Win32应用程序
+2、在vs种新增资源
+创建成功后会新增两个文件：xxx.rc  和 resource.h
+3、打开新创建的xxx.rc 文件，新增一个对话框，并在对话框新增2个按钮
+4、打开resource.h文件，会发现编译器自动给生成了宏
+5、通过DialogBox创建对话框
+INT_PTR DialogBox(					
+  HINSTANCE hInstance,  // handle to module					
+  LPCTSTR lpTemplate,   // dialog box template					
+  HWND hWndParent,      // handle to owner window					
+  DLGPROC lpDialogFunc  // dialog box procedure					
+);					
+6、第一Dialog消息处理函数  处理过返回TRUE ， 未处理返回FALSE
+
+
 资源表
 
 typedef struct _IMAGE_RESOURCE_DIRECTORY {								
