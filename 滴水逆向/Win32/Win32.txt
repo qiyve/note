@@ -306,10 +306,48 @@ WM_NOTIFY消息中的参数如下：
 	    LVFINDINFO lvfi;						
 	} NMLVFINDITEM, *PNMLVFINDITEM;						
 
-			
+---------------------------------------------------------------------------------------------------------------------------------
 
+创建线程
 
+HANDLE CreateThread(				
+  LPSECURITY_ATTRIBUTES lpThreadAttributes, // 安全属性 通常为NULL				
+  SIZE_T dwStackSize,                      	          // 参数用于设定线程可以将多少地址空间用于它自己的堆栈				
+				          // 每个线程拥有它自己的堆栈
+  LPTHREAD_START_ROUTINE lpStartAddress,  // 参数用于指明想要新线程执行的线程函数的地址				
+  LPVOID lpParameter,                       	          // 线程函数的参数				
+				          // 在线程启动执行时将该参数传递给线程函数
+				          // 既可以是数字，也可以是指向包含其他信息的一个数据结构的指针
+  DWORD dwCreationFlags,                   	          // 0 创建完毕立即调度  CREATE_SUSPENDED创建后挂起				
+  LPDWORD lpThreadId                        	          // 线程ID 				
+);				          // 返回值：线程句柄
 
+创建线程代码：
+  
+  //创建一个新的线程
+HANDLE hThread = :: CreateThread( NULL, 0, ThreadProc, NULL, 0, NULL);   // : :  表示全局
+
+ //如果不在其他的地方引用它 关闭句柄
+ :: CloseHandle(hThread);			        
+
+线程函数：
+ DWORD WINAPI ThreadProc ( 
+			LPVOID lpParameter  // thread data  线程数据
+			)
+向线程函数传递变量的两种方式：
+1.全局变量
+2.线程参数		
+
+文本框赋值：
+SetWindowText( 句柄，数据缓冲区）；
+文本框取值：
+GetWindowText( 句柄，数据缓冲区， 长度);
+数字转字符：
+sprintf( 数据缓冲区， "%d", 数字）
+字符串转数字：
+sscanf（数据缓存区r，"%d", OUT &dwTimer)
+获取子窗口：
+GetDlgItem( hDlg, 窗口ID）；
 
 
 
