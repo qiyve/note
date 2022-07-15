@@ -349,9 +349,57 @@ sscanf（数据缓存区r，"%d", OUT &dwTimer)
 获取子窗口：
 GetDlgItem( hDlg, 窗口ID）；
 
+--------------------------------------------------------------------------------------------------------------------------------
+
+线程控制
+  
+  挂起线程：
+   : :SuspendThread(hThread);
+
+  恢复线程：
+  : :ResumeThread(hThread);
+
+  终止线程:
+
+方式一：
+  : :ExitThread(DWORD dwExitCode);     //此方式会释放掉该线程堆栈    同步
+
+方式二：
+  线程函数返回 		//需要写在线程函数中，最优方式
+
+方式三：
+  : :TerminateThread(hThread, 2);   //  线程句柄, 参数码           异步
+  : :WaitForSingleObject(hThread, INFINITE);	// 
+
+判断线程是否结束		
+		
+BOOL GetExitCodeThread(		
+  HANDLE hThread,		
+  LPDWORD lpExitCode		
+);		
+		
+STILL_ACTIVE 正在运行		
+
+参数：
+hThread：要结束的线程句柄
+dwExitCode：指定线程的退出代码。可以通过GetExitCodeThread来查看一个线程的退出代码
 
 
+获取线程CONTEXT结构：
 
+ //挂起线程
+ SubpendThread（线程句柄）；
+ CONTEXT  context；
+
+ //设置要获取的类型
+context.ContextFlags = CONTEXT_CONTROL
+
+ //获取
+ BOOL ok = : :GetThreadContext(hThread, &context);
+
+ //设置
+ context.Eip = 0x401000;
+ SetThreadContext(hThread, &context);
 
 
 
