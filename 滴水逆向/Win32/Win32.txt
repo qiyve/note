@@ -362,10 +362,10 @@ GetDlgItem( hDlg, 窗口ID）；
   终止线程:
 
 方式一：
-  : :ExitThread(DWORD dwExitCode);     //此方式会释放掉该线程堆栈    同步
+  : :ExitThread(DWORD dwExitCode);     //此方式会释放掉该线程堆栈    同步   需要写在线程函数中，
 
 方式二：
-  线程函数返回 		//需要写在线程函数中，最优方式
+  线程函数返回 		//最优方式
 
 方式三：
   : :TerminateThread(hThread, 2);   //  线程句柄, 参数码           异步
