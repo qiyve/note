@@ -351,7 +351,7 @@ GetDlgItem( hDlg, 窗口ID）；
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-线程控制
+1、线程控制
   
   挂起线程：
    : :SuspendThread(hThread);
@@ -362,14 +362,20 @@ GetDlgItem( hDlg, 窗口ID）；
   终止线程:
 
 方式一：
-  : :ExitThread(DWORD dwExitCode);     //此方式会释放掉该线程堆栈    同步   需要写在线程函数中，
+  : :ExitThread(DWORD dwExitCode);     
+        //参数中没有线程句柄，在线程函数中使用；
+        //参数dwExitCode为线程退出码，将作为线程处理函数的返回值，用来描述线程的非正常退出
+        //每一个线程都有自己的堆栈，该函数终止的线程会清理堆栈；
+        //该函数一旦调用，线程将不能再被操作，但该函数并不会释放堆中的内存，因此存在内存溢出的隐患；
 
 方式二：
-  线程函数返回 		//最优方式
+  线程函数返回 		
+     //线程函数执行完后会结束线程，因为是正常结束，可以自己写代码来释放堆中申请的内存；      
 
 方式三：
-  : :TerminateThread(hThread, 2);   //  线程句柄, 参数码           异步
-  : :WaitForSingleObject(hThread, INFINITE);	// 
+  : :TerminateThread(hThread, 2);   //第二个参数为线程退出码 
+  : :WaitForSingleObject(hThread, INFINITE);	
+      //TerminateThread并不会清理堆栈，这样的好处是其它地方用堆栈中的变量时不会出问题；    
 
 判断线程是否结束		
 		
@@ -384,9 +390,30 @@ STILL_ACTIVE 正在运行
 hThread：要结束的线程句柄
 dwExitCode：指定线程的退出代码。可以通过GetExitCodeThread来查看一个线程的退出代码
 
+ExitThread和TreminateThread的区别:
+
+   都是用来结束线程的，ExitThread是同步，也就是ExitThread执行完毕后程序才能继续执行；
+   TreminateThread是异步调用，也就是单独起了一个线程来让目标线程结束；
+   TreminateThread调用后是不能保证立即结束线程，在后面写的线程 结束后 要执行的代码可能有问题；
+   解决方法就是用 WaitForSingleObject，该函数会阻塞线程直到TerminateThread的目标线程真正结束；
+
+线程挂起后恢复时并不会立即运行；
+因为windows并不是实时的操作系统，只有在调度程序给可调度状态的线程分配cpu时间时才会运行
+因此windows种无法实现在某个确定的时间点运行一个线程；
+
+2、线程contex结构
+每个线程在执行的时候，都会独自占用一个cpu
+当系统中的线程数量 > CPU的数量时，就会存在多个线程共用一个CPU的情况
+但CPU每次只能运行一个线程，Windows每隔20毫秒会进行线程的切换，
+那比如线程A执行到地址：0x2345678 eax:1 ecx:2 edx:3 ebx:4...还有eflag标志寄存器中的值等等。。。             
+此时，线程执行时间到了，被切换到了线程B。。。。
+当线程B的时间片也到了，再切换回线程A时，系统是如何知道该从哪个地址开始执行呢？被切换前用到的各种寄存器的值该如何恢复呢？
 
 获取线程CONTEXT结构：
 
+
+进程就是程序的4GB空间，线程就是EIP；
+当一个线程切换时，为了再次执行时能接着执行，会将寄存器的信息保存context结构中；
  //挂起线程
  SubpendThread（线程句柄）；
  CONTEXT  context；
@@ -401,8 +428,7 @@ context.ContextFlags = CONTEXT_CONTROL
  context.Eip = 0x401000;
  SetThreadContext(hThread, &context);
 
-
-
+ 
 
 
 
