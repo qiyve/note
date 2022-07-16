@@ -428,9 +428,80 @@ context.ContextFlags = CONTEXT_CONTROL
  context.Eip = 0x401000;
  SetThreadContext(hThread, &context);
 
+--------------------------------------------------------------------------------------------------------------------------
+
+线程安全
+
+1.线程不安全的原因
+一个进程的4GB空间中可能有多个线程；
+每一个线程都有自己的堆栈；
+堆栈中放参数、局部变量等；
+如果线程只使用参数和局部变量不会有线程安全问题；
  
+当多个线程访问同一资源例如放在全局变量区中的全局变量时可能会有线程安全问题；
+例如一个线程读另一个线程写或者两个线程都写同一个全局变量，最后得到的值可能并不是准确的；
+    线程A读全局变量x，此时x=10；
+    切换到线程B，B读到x=10；
+    B执行x+1并写出；此时x=11；
+    切换到线程A，A执行x+1并写出，此时由于之前A读到的是10，A从contex结构中得到x的值为10，而不是B修改后的11；x=10+1=11；
+    最后x=11，而不是预期的12；
+
+2.如何解决线程安全问题：
+
+就像火车上的厕所一样，一次只能有一个人进去；
+如果一个人进去，就锁上门，后面的人看到门锁了也就进不去了；
+等第一个人使用完，就打开门锁；
+
+临界区使用步骤：
+
+ //1.创建CRITICAL_SECTION：
+  CRITICAL_SECTIO  cs；
+
+ //2.在使用前进行初始化
+  InitializeCriticalSection(&cs);
+
+ //3.在函数中使用
+   DWORD WINAPI 线程A(PVOID pvParam) 			
+   {			
+      EnterCriticalSection(&cs);						
+      //对全局遍历X的操作						
+      LeaveCriticalSection(&cs);			
+      return(0);			
+    }			
+					
+DWORD WINAPI 线程B(PVOID pvParam) 			
+{			
+      EnterCriticalSection(&g_cs);					
+      //对全局遍历X的操作					
+      LeaveCriticalSection(&g_cs);			
+      return(0);			
+}			
+
+ //4.删除CRITICAL_SECTION
+  VOID DeleteCriticalSection(PCRITICAL_SECTION  pcs)
 
 
+typedef struct _RTL_CRITICAL_SECTION {		
+    PRTL_CRITICAL_SECTION_DEBUG DebugInfo;		
+    LONG LockCount;		
+    LONG RecursionCount;		
+    HANDLE OwningThread;       		
+    HANDLE LockSemaphore;		
+    DWORD SpinCount;		
+} RTL_CRITICAL_SECTION, *PRTL_CRITICAL_SECTION;		
+
+LockCout: 
+  它被初始化为数值 -1 
+  此数值等于或大于0时，表示次临界区被占用
+
+ 等待获得临界区的线程数：LockCout - （RecursionCout - 1）
+
+RecursionCout：
+ 此字段包含所有者线程已经获得该临界区的次数
+
+OwningThread：
+ 此字段包含当前占用此临界区的线程标识符
+ 此线程 ID 与 GetCurrentThreadId 所返回的Id相同
 
 
 
