@@ -515,10 +515,10 @@ DWORD WaitForSingleObject(
 功能说明：
    等待函数可使线程自愿进入等待状态，直到一个特定的内核对象变为已通知状态为止。
 
-hHandle:
-   内核对象句柄，可以是进程也可以是线程。
-dwMilliseconds：
-   等待时间，单位是毫秒 INFINITE（-1）一直等待
+hHandle ->    内核对象句柄，可以是进程也可以是线程。
+
+dwMilliseconds  ->   等待时间，单位是毫秒 INFINITE（-1）一直等待
+   
 返回值：
    WAIT_OBJECT_（0） 等待对象变为已通知
    WAIT_TIMEOUT(0x102)  超时
@@ -544,22 +544,51 @@ DWORD WaitForMultipleObjects(
 功能说明：
   同时查看若干个内核对象的已通知状态
 
-nCount:
-   要查看内核对象的数量
-lpHandles:
-   内核对象数组
-bWaitAll:
-   等到类型 TRUE 等到所有变为已通知，FALSE 只要有一个变为已通知
-dwMilliseconds：
-   超时时间
-   INFINITE 一直等待
+nCount ->      要查看内核对象的数量
+ 
+lpHandles ->  内核对象数组
+  
+bWaitAll ->    等到类型 TRUE 等到所有变为已通知，FALSE 只要有一个变为已通知
+   
+dwMilliseconds -> 超时时间    INFINITE 一直等待
+   
+ 
 返回值：
    bWaitAll为TRUE时， 返回WAIT_OBJECT_0(0）代码所有内核对象都变成已通知
    bWaitAll为FALSE时，返回最先变成已通知的内核对象在数组中的索引
    WAIT_TIMEOUT(0x102)  超时
 
-跨进程的线程控制之于互斥体
+互斥体：
+  互斥： 
+      一个全局变量或资源，可能有多个线程同时访问时会出现线程安全问题；
+      可以用互斥机制来解决： 一个线程正在访问目标资源时其他线程都不能访问；
+      临界区就是实现互斥的一种方式；
+   
+ 互斥体也是用用来实现互斥的一种方式：
+   1.创建互斥体： API函数：
   
+    HANDLE CreateMutex(
+    	LPSECURITY_ATTRIBUTES lpMutexAttributes,  // SD
+    	BOOL bInitialOwner,                       	// initial owner
+    	LPCTSTR lpName                            // object name
+      ) ;
+  
+     lpMutexAttributes  ->  三环程序一般传NULL，如果这个参数不为空一般就是内核对象
+     bInitialOwner  ->   
+     lpName    ->互斥体名称；如果另一个进程想打开该互斥体，需要用到                  
+  
+   2.打开互斥体
+       HANDLE OpenMutex(
+ 	 DWORD dwDesiredAccess,  // access
+  	 BOOL bInheritHandle,    // inheritance option
+  	 LPCTSTR lpName          // object name
+         );
+
+        dwDesiredAccess  ->  权限；MUTEX_ALL_ACCESS、SYNCHRONIZE
+        bInheritHandle,    ->  返回的句柄是否可继承
+        lpName         ->  目标互斥体
+
+
 	//进程一：
    	HANDLE g_hMutex = CreateMutex(NULL, FALSE, "XYZ")
 
@@ -578,19 +607,7 @@ dwMilliseconds：
 	//逻辑代码
   	 ReleaseMutex（g_hMutex);
 
-HANDLE OpenMutexW(
-  [in] DWORD   dwDesiredAccess,   
-  [in] BOOL    bInheritHandle,
-  [in] LPCWSTR lpName
-);
- dwDesiredAccess : 
-    对互斥体的访问，使用互斥体只需要SYNC访问权限，要更改互斥锁的去安全性，请指定MUTEX_ALL_ACCESS,如果
-   指定对象的安全描述符不允许对调用进程进行请求的访问，则该函数将失败
 
- bInheritHandle ：
-    如果此值为TRUE，则此进程创建的进程将继承句柄，否则进程不会继承此句柄
-  lpName：
-    要打开的互斥锁的名称。名称比较区分大小写
 
 互斥体与临界区的区别：
 
