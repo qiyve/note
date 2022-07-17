@@ -503,17 +503,101 @@ OwningThread：
  此字段包含当前占用此临界区的线程标识符
  此线程 ID 与 GetCurrentThreadId 所返回的Id相同
 
+-------------------------------------------------------------------------------------------------------------------------
+
+WaitForSingleObject ：
+
+DWORD WaitForSingleObject(					
+  HANDLE hHandle,        // handle to object					
+  DWORD dwMilliseconds   // time-out interval					
+);					
+ 
+功能说明：
+   等待函数可使线程自愿进入等待状态，直到一个特定的内核对象变为已通知状态为止。
+
+hHandle:
+   内核对象句柄，可以是进程也可以是线程。
+dwMilliseconds：
+   等待时间，单位是毫秒 INFINITE（-1）一直等待
+返回值：
+   WAIT_OBJECT_（0） 等待对象变为已通知
+   WAIT_TIMEOUT(0x102)  超时
+
+特别说明：
+  
+   1、内核对象中的每种对象都可以说是处于已通知或未通知的状态之中
+   2、这种状态的切换是由Microsoft为每个对创建的一套规则来决定的
+   3、当线程正在运行的时候，线程内核对象处于未通知状态
+   4、当线程终止运行的时候，他就变为已通知状态
+   5、在内核中就是个BOOL值，运行时FALSE，结束TRUE
 
 
+WaitForMultipleObjects:
+ 
+DWORD WaitForMultipleObjects(						
+  DWORD nCount,             // number of handles in array						
+  CONST HANDLE *lpHandles,  // object-handle array						
+  BOOL bWaitAll,            // wait option						
+  DWORD dwMilliseconds      // time-out interval						
+);						
 
+功能说明：
+  同时查看若干个内核对象的已通知状态
 
+nCount:
+   要查看内核对象的数量
+lpHandles:
+   内核对象数组
+bWaitAll:
+   等到类型 TRUE 等到所有变为已通知，FALSE 只要有一个变为已通知
+dwMilliseconds：
+   超时时间
+   INFINITE 一直等待
+返回值：
+   bWaitAll为TRUE时， 返回WAIT_OBJECT_0(0）代码所有内核对象都变成已通知
+   bWaitAll为FALSE时，返回最先变成已通知的内核对象在数组中的索引
+   WAIT_TIMEOUT(0x102)  超时
 
+跨进程的线程控制之于互斥体
+  
+	//进程一：
+   	HANDLE g_hMutex = CreateMutex(NULL, FALSE, "XYZ")
 
+	//进程二：
+   	HANDLE g_hMutex = OpenMuTex(MUTEX_ALL_ACCESS, FALSE, "XYZ");  //打开现有的命名互斥对象。
 
+  	 WaitForSingleObject( g_hMutex, INFINITE );
 
+	//逻辑代码
+   	ReleaseMutex（g_hMutex);  //释放指定互斥对象的所有权。
 
+	//进程三：
+   	HANDLE g_hMutex = OpenMutex（MUTEX_ALL_ACCESS, FALSE， “XYZ");
+   	WaitForSingleObject(g_hMutex, INFINITE);
 
+	//逻辑代码
+  	 ReleaseMutex（g_hMutex);
 
+HANDLE OpenMutexW(
+  [in] DWORD   dwDesiredAccess,   
+  [in] BOOL    bInheritHandle,
+  [in] LPCWSTR lpName
+);
+ dwDesiredAccess : 
+    对互斥体的访问，使用互斥体只需要SYNC访问权限，要更改互斥锁的去安全性，请指定MUTEX_ALL_ACCESS,如果
+   指定对象的安全描述符不允许对调用进程进行请求的访问，则该函数将失败
+
+ bInheritHandle ：
+    如果此值为TRUE，则此进程创建的进程将继承句柄，否则进程不会继承此句柄
+  lpName：
+    要打开的互斥锁的名称。名称比较区分大小写
+
+互斥体与临界区的区别：
+
+   1、临界区只能用于单个进程间的线程控制
+   2、互斥体可以设定等待超时，但临界区不能
+   3、线程意外终止时，Mutex可以避免无限等待。
+   4、Mutex效率没有临界区高
 
 
 
