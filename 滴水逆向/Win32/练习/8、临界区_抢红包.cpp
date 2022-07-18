@@ -149,7 +149,6 @@ DWORD WINAPI ThreadProc(LPVOID lpParameter)
 	HANDLE hThread2 = ::CreateThread(NULL, 0, ThreadProc2, NULL, 0, NULL);
 	HANDLE hThread3 = ::CreateThread(NULL, 0, ThreadProc3, NULL, 0, NULL);
 
-
 	return 0;
 }
 
