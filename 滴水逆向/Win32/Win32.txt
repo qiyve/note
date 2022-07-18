@@ -574,7 +574,9 @@ dwMilliseconds -> 超时时间    INFINITE 一直等待
       ) ;
   
      lpMutexAttributes  ->  三环程序一般传NULL，如果这个参数不为空一般就是内核对象
-     bInitialOwner  ->   
+     bInitialOwner  ->   此值为 TRUE 并且调用方创建了互斥体，
+      则调用线程将获得互斥对象的初始所有权。否则，调用线程不会获得互斥锁的所有权
+
      lpName    ->互斥体名称；如果另一个进程想打开该互斥体，需要用到                  
   
    2.打开互斥体
@@ -608,13 +610,133 @@ dwMilliseconds -> 超时时间    INFINITE 一直等待
   	 ReleaseMutex（g_hMutex);
 
 
-
 互斥体与临界区的区别：
 
    1、临界区只能用于单个进程间的线程控制
    2、互斥体可以设定等待超时，但临界区不能
    3、线程意外终止时，Mutex可以避免无限等待。
    4、Mutex效率没有临界区高
+
+-----------------------------------------------------------------------------------------------------------------------
+
+时间、线程同步
+
+1、内核对象
+   内核对象是由操作系统创建和维护的，在程序的高2g内存中创建
+   进程可以共享内核对象；
+   常见的内核对象：进程、线程、文件、文件映射、事件、互斥体等等
+
+ (1) 内核对象的创建
+  各种内核对象有各自的创建API函数：
+  内核对象是由操作系统创建的，三环程序只能用API函数告诉系统需要创建一个内核程序；
+例如：创建事件和互斥体
+
+         HANDLE  g_hEvent = CreateEvent(NULL, TRUE, FALSE, "XYZ")
+         HANDLE  g_hMutex = CreateMutex( NULL, FALSE, "XYZ")
+
+  Windows在创建完成内核对象后会返回该内核对象的句柄；
+  句柄实际上是指针的指针；
+  不直接返回内核对象地址的原因是为了安全，如果高2g的程序通过地址直接修改了内核对象，可能会导致系统崩溃；
+
+ (2) 获取内核对象
+    获取事件的API
+          
+           HANDLE  OpenEvent( 
+		DWORD  dwDesiredAccess, 	// access
+		BOOL	bInheritHandle,    	// inheritance option  
+		LPCTSTR   lpName	            	// object name   
+		); 
+       参数：
+      dwDesiredAccess ->  指定对 事件对象的请求访问权限
+      bInheritHandle     ->  指定是否返回的句柄是否继承，该参数必须设置为FALSE
+      lpName   ->  指向一个NULL结束的字符串，即将要打开的事件对象的名字。名称区分大小写	            
+
+    实例：获取事件和互斥体
+            HANDLE  g_hEvent = OpenEvent(EVENT_ALL_ACCESS,  FALSE,  "XYZ"）；
+            HANDLE  g_hMutex = OpenMutex( MUTEX_ALL_ACCESS, FALSE, "XYZ"); 	
+ 
+ (3)内核函数销毁
+    
+            BOOL  CloseHandle ( HANDLE  hobj);
+   只是告诉操作系统，这个内核对象不用了，实际上该内核对象是否销毁还要看操作系统；  
+   在创建完内核对象后，低2g会有一个结构体保存内核对象的信息；
+   结构体中有一个成员为计数器，每当有一个进程openXXX调用内核对象时，计数器加1，调用CloseHandle时计数器减1；
+   当计数器为0时表示没有进程使用内核对象了，操作系统将销毁该对象
+
+   1.当没有其他程序引用时，系统会销毁内核对象（使用数量），
+   2.内核对象的生命周期，可能比创建他的对象要长。（其他进程调用open方法得到了内核进程的句柄时）
+
+2、事件
+    事件是一种内核对象     
+
+   (1) 创建事件
+  
+           HANDLE  CreateEvent(
+ 	   LPSECURITY_ATTRIBUTES    lpEvebtAttributes,  // 安全属性 NULL时为系统默认
+ 	   BOOL  bManualReset,	// TRUE 通过调用ResetEvent将事件对象标记为未通知 
+	   BOOL  bInitialState,	// TRUE 已通知状态  FALSE未通知状态
+	   LPCTSTR  lpName    	// 对象名称 以NULL结尾的字符串      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
