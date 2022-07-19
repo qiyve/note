@@ -677,7 +677,12 @@ dwMilliseconds -> 超时时间    INFINITE 一直等待
 	   BOOL  bInitialState,	// TRUE 已通知状态  FALSE未通知状态
 	   LPCTSTR  lpName    	// 对象名称 以NULL结尾的字符串      
 
+    bManualReset -> 如果为FALSE，只要有线程wait到了该事件，立马会将该事件的状态改回去变成未通知状态，为TRUE只能
+                                 wait完后自己写代码来修改为未通知状态
+    bInitialState   -> 表示事件创建时是否为已通知状态，如果为TRUE有线程wait该事件时在创建时立马就wait到了
 
+   (2)事件控制
+          BOOL   SetEvent
 
 
 
