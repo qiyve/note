@@ -1,0 +1,192 @@
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+进程创建 __ 句柄表
+
+1、进程的创建过程
+	
+	打开系统    ——>  双击运行的程序  ——>	 EXE开始执行
+
+  步骤一：
+ 	当系统启动后，创建一个进程：Explorer.exe 也就是桌面进程
+  步骤二：
+	当用户双击某一个EXE时，Exeplorer 进程使用CreateProcess 函数创建被双击的EXE，也就是说，我们在桌面上双击创建的进程
+           都是Exeplorer 进程的子进程
+	可以用工具XueTr.exe 查看哪些进程是由Exeplorer创建的
+   
+  （1）CreateProcess 函数
+
+     BOOL CreateProcess(                                
+           LPCTSTR	lpApplicationName,                   // name of executable module                                
+           LPTSTR	lpCommandLine,                        // command line string                                
+           LPSECURITY_ATTRIBUTES    lpProcessAttributes, // SD                                
+           LPSECURITY_ATTRIBUTES    lpThreadAttributes,  // SD                                
+           BOOL 	bInheritHandles,                        // handle inheritance option                                
+           DWORD 	dwCreationFlags,                       // creation flags                                
+           LPVOID 	lpEnvironment,                          // new environment block                                
+           LPCTSTR 	lpCurrentDirectory,                   // current directory name                                
+           LPSTARTUPINFO l	pStartupInfo,             // startup information                                
+           LPPROCESS_INFORMATION lpProcessInformation // process information                                
+         );    
+
+ CreateProcess用来创建进程：
+  
+        首先在内核层也就是高2G创建一块内存，也就是进程的内核对象；
+        内核对象都有一个计数器，创建时计数器的值为1.如果被其他进程调用OpenXX 计数器的值+1；当计数器的值为0时内核对象会被释放
+   
+        进程的内核对象会有一张表格，叫句柄表，用来保存进程中创建的内核对象的地址；句柄表高创建时是空的
+        每当调用CreateXX创建内核对象时就会在句柄表中添加一条记录：
+        例如：CreateProcess、 CreateMutex、 CreateThread、 CreateFile、 CreateEvent、CreateFileMapping
+
+        如果直接将内核对象的地址返回给3环程序是不安全的，例：如果3环程序修改了内核对象的地址，内核用这个修改后的地址
+    找不到内核对象，系统就会崩溃；因此内核会将一个编号也就是内核对象的句柄传递给3环程序
+        为了安全，不会给客户端返回真正的地址而是一个编号
+
+     (2) 分配4GB空间
+
+         进程对象创建完后，接下来就创建一个4GB的虚拟空间；
+         32位的Windows系统每个进程都有自己独立发虚拟4GB空间；（2的32次方 = 4GB）
+         这段4GB空间分为3个区域
+ 	0 ~ FFFF 不可使用，用作NULL指针，当访问该段内存时，程序会报内存无法访问错误并退出；
+	10000 ~ 7FFFFFFF 作为用户区，3环程序主要操作该区域的内存；
+	剩下的高2G内存被内核使用
+
+     (3) 创建进程的主线程
+    	
+          当进程的4GB空间分配后，首先会将程序exe文件拉伸位镜像，放入ImageBase的位置，
+          exe文件肯能用到了其他Dll，这些Dll的信息再导入表中，通过遍历导入表，将需要用到的Dll拉伸后放入各自ImageBase的位置；
+          如果Dll的ImageBase位置被占用，将放入其他位置，此时需要参考Dll中的重定位表来修复 全局变量的值；
+          Dll也可能用到其他Dll，处理凡是和前一步一样，可以利用递归
+          IAT表中存储的是导入的Dll函数的名称，为了让程序能正确定位到函数，需要将IAT表中的函数名转成函数地址；
+
+          当exe个Dll贴入内存空间并修复完毕后程序达到了可运行的条件
+          进程只是一个空间概念，程序真正想泡起来还需要至少有一个主线程；
+          每个线程都会有一个CONTEXT结构，用来记录线程运行的状态，比如寄存器EIP的值，因此线程切换后再次运行时依然能接着跑；
+          程序需要从程序入口处开始跑，也就是main函数的地址，程序的入口地址 = ImageBase + OEP；这两个值都是可以在exe的PE
+      结构的可选PE头中保存；
+          将程序入口的地址交给EIP，程序就能跑了；
+
+           当进程的空间创建完毕，EXE与导入表中的DLL都正确加载完毕后，会创建一个线程；
+           当线程得到CPU的时候，程序就真正开始执行了，EIP的初始值设定为 :  ImageBase + OEP 
+
+          HANDLE CreateThread               		 //创建线程
+	(  
+  	LPSECURITY_ATTRIBUTES lpThreadAttributes,         // 安全属性 通常为NULL                
+  	SIZE_T dwStackSize,                       // 参数用于设定线程可以将多少地址空间用于它自己的堆栈               
+  	LPTHREAD_START_ROUTINE lpStartAddress,    // 参数用于指明想要新线程执行的线程函数的地址；函数地址是一个全局变量，函数名就是该全局变量                
+  	LPVOID lpParameter,                      // 线程函数参数   在线程启动执行时将该参数传递给线程函数 // 既可以是数字，也可以是指向包含其他信息的一个数据结构的指针
+  	DWORD dwCreationFlags,              // 0 创建完毕立即调度  CREATE_SUSPENDED创建后挂起                
+ 	LPDWORD lpThreadId                    // 线程ID; out参数，线程是内核创建的创建完成后会生成一个线程id，用来唯一标识该线程                 
+		);                   	       // 返回值：线程句柄，3环程序想要操作该线程需要获取线程句柄
+                                       
+          当进程创建成功后，会将进程句柄、主线程句柄、进程ID以及主线程ID存储在 下面的结构中：  
+            typedef struct _PROCESS_INFORMATION
+	{
+   	   HANDLE hProcess;    	 //进程句柄
+  	   HANDLE hThread;   	 //主线程句柄
+   	   DWORD dwProcessId;    	 //进程ID
+	   DWORD dwThreadId;   	 //线程ID
+	} PROCESS_INFORMATION;         		
+
+总结：
+
+       每一个进程都需要由其他的进程把他创建出来；
+       一般双击exe 开始的进程都是由Explorer.exe 调用 CreateProcess 来创建的       
+
+       CreateProcess所做的工作：
+	创建一个进程的内核对象，
+	给进程分配一个4GB的空间
+	加载PE：包括exe 、 dll、修复dll；	
+	创建主线程，把程序入口第hi交给EIP
+
+        既然Explorer.exe可以创建一个进程，我们也可以写程序模拟这种方式来创建一个进程
+	BOOL CreateProcess
+	     (					
+  	         PCTSTR pszApplicationName,		// 需要运行的程序名，该参数需要传递一个字符串常量			
+   	        PTSTR pszCommandLine,			// 相当于命令进行运行程序时出入的内容		
+   	        PSECURITY_ATTRIBUTES psaProcess,					
+   	        PSECURITY_ATTRIBUTES psaThread,					
+   	        BOOL bInheritHandles,					
+  	        DWORD fdwCreate,					
+   	        PVOID pvEnvironment,					
+  	        PCTSTR pszCurDir,					
+       	        PSTARTUPINFO psiStartInfo,		// STARTUPINFO 结构，用来设定进程的属性			
+       	        PPROCESS_INFORMATION ppiProcInfo	/* 是一个out参数，传入PROCESS_INFORMATION结构，用来保存进程创建后的进程
+	       );					句柄、进程ID。主线程句柄以及主线程ID				
+					
+       STARTUPINFO结构：
+	用来设定要创建的应用程序的属性，比如可以指定新创建的控制台程序的标题等待、
+	一般情况，只要为第一个成员赋值就可以了： si.cd = sizeof (is);				
+	typedef struct _STARTUPINFO            
+	     {            
+  		 DWORD cb;            
+  		 PSTR lpReserved;            
+   		PSTR lpDesktop;            
+   		PSTR lpTitle;            
+   		DWORD dwX;            
+   		DWORD dwY;            
+  		DWORD dwXSize;            
+  		DWORD dwYSize;            
+  	 	DWORD dwXCountChars;            
+   		DWORD dwYCountChars;            
+   		DWORD dwFillAttribute;            
+   		DWORD dwFlags;            
+   		WORD wShowWindow;            
+   		WORD cbReserved2;            
+   		PBYTE lpReserved2;            
+   		HANDLE hStdInput;            
+   		HANDLE hStdOutput;            
+   		HANDLE hStdError;            
+	   } STARTUPINFO, *LPSTARTUPINFO;  
+	----------------------------------------------------------------------------------
+    
+     关于句柄和ID
+           内核对象创建后系统都会给一个句柄和一个ID
+           大多数时候程序中使用的都是句柄，操作系统调度时使用的时ID
+
+      1.  都是操作系统分配的一个编号，句柄是客户程序使用， ID主要是系统调度时使用
+      2.  调用CloseHandle 关闭进程或者线程句柄的时候，只是让内核计数器减少一个，并不是终止进程或者线程，进程或线程将继续运行，
+        直到它自己终止运行
+      3.  进程ID与线程ID 是不可能相同
+           但不要通过 进程或者线程 的ID来操作 进程或者线程
+           因为，这个编号是会重复使用的，也就是说当你通过 ID = 100 这个编号去访问进程的时候，他已经结束了，而且系统将这个编号赋值给了
+        另外一个进程或者线程
+
+
+    进程的终止
+      终止进程的三种方式：										
+																			
+	1、VOID　ExitProcess(UINT fuExitCode)				//进程自己调用												
+	2、BOOL TerminateProcess(HANDLE hProcess, UINT fuExitCode);	//终止其他进程													
+	3、ExitThread				//终止进程中的所有线程，进程也会终止			
+
+      获取进程终止时的退出码：
+	BOOL GetExitCodeProcess(HANDLE hProcess,PDWORD pdwExitCode);
+
+          终止线程时的相关操作：
+	1.进程中剩余的所有线程全部终止运行
+	2.进程指定的所有用户对象均被释放，所有内核对象均被关闭
+	3.进程内核对象的 状态 变成收到通知的状态
+	4.进程内核对象的 使用计数递减1	
+									
+           ----------------------------------------------------------------------------------	
+			
+    句柄继承					
+         一个进程创建时，会有一张句柄表
+         子进程恢复至一份父进程的句柄表
+
+          在进程中openXX 可以得到内核对象的句柄，以此来实现进程间共享内核对象
+          也可以通过句柄继承来实现内核对象共享
+ 
+     思路：
+        在一个进程中用CreateProcess创建一个子进程；
+        父进程中创建一个可继承的事件，事件是内核对象；
+           让内核对象可继承需要再调用CreateXX 创建时传入的 SECURITY_ATTRIBUTES结构中的第三个成员为TRUE；
+           子进程调用Wait函数等待该事件，如果事件变为已通知状态继续向下执行；
+           在子进程中不用OpenXX 打开事件，如果能等到通知说明子进程的句柄表中已经有了事件的句柄，也就是继承成功
+           子进程中等待事件通知需要直到是等待的那个事件，不调用OpenXX无法直接得到事件句柄，可以通过命令行传参来将事件告诉子进程
+          
+
+
+
+
+
